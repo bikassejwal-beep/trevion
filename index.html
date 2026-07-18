@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trevion Technologies | Software & Web Development</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandDark: '#0B2545',
+                        brandBlue: '#1396E6',
+                        brandLight: '#EEF4F8'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+        <div class="max-w-7xl x-auto px-6 lg:px-8 h-20 flex items-center justify-between mx-auto">
+            <div class="flex items-center gap-3">
+                <!-- Logo Image Placeholder -->
+                <img src="logo.png" alt="Trevion Technologies Logo" class="h-12 w-auto object-contain">
+            </div>
+            <nav class="hidden md:flex items-center gap-8 font-medium text-gray-600">
+                <a href="#home" class="hover:text-brandBlue transition-colors">Home</a>
+                <a href="#services" class="hover:text-brandBlue transition-colors">Services</a>
+                <a href="#about" class="hover:text-brandBlue transition-colors">About Us</a>
+                <a href="#contact" class="bg-brandDark text-white px-5 py-2.5 rounded-lg hover:bg-brandBlue transition-all shadow-md">Get in Touch</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative overflow-hidden bg-gradient-to-br from-brandDark via-[#132237] to-brandDark text-white py-24 lg:py-32">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6">
+                <span class="text-brandBlue font-semibold uppercase tracking-wider text-sm bg-brandBlue/10 px-3 py-1 rounded-full border border-brandBlue/20">Empowering Digital Innovation</span>
+                <h1 class="text-4xl lg:text-6xl font-bold tracking-tight leading-tight">
+                    We Build Enterprise <span class="text-brandBlue">Software</span> & Modern Websites
+                </h1>
+                <p class="text-gray-300 text-lg leading-relaxed max-w-xl">
+                    At Trevion Technologies, we transform complex business challenges into seamless, scalable digital solutions. From custom software architectural builds to high-performance web engineering.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="#services" class="bg-brandBlue text-white font-medium px-6 py-3.5 rounded-lg shadow-lg hover:bg-blue-500 transition-all flex items-center gap-2">
+                        Our Services <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </a>
+                    <a href="#contact" class="border border-gray-400 text-white font-medium px-6 py-3.5 rounded-lg hover:bg-white/10 transition-all">
+                        Discuss Project
+                    </a>
+                </div>
+            </div>
+            <div class="hidden md:flex justify-center relative">
+                <!-- Tech Elements Graphic Illustration via CSS -->
+                <div class="w-80 h-80 rounded-2xl bg-gradient-to-tr from-brandBlue to-blue-500 opacity-20 absolute filter blur-2xl animate-pulse"></div>
+                <div class="relative border border-white/10 bg-white/5 p-8 rounded-2xl backdrop-blur-sm shadow-2xl w-full max-w-md">
+                    <div class="flex items-center gap-2 mb-4 border-b border-white/10 pb-3">
+                        <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                        <span class="text-xs text-gray-400 ml-2">trevion_architecture.config</span>
+                    </div>
+                    <pre class="text-xs text-brandBlue font-mono space-y-1">
+<span>const company = "Trevion Technologies";</span>
+<span>const capabilities = [</span>
+<span>  "Custom Software Development",</span>
+<span>  "Advanced Web Architecture",</span>
+<span>  "Scalable UI/UX Engineering"</span>
+<span>];</span>
+<span></span>
+<span>function deploy() {</span>
+<span>  return buildDigitalFuture(capabilities);</span>
+<span>}</span>
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <h2 class="text-3xl lg:text-4xl font-bold text-brandDark tracking-tight">Our Core Expertise</h2>
+            <div class="h-1 w-20 bg-brandBlue mx-auto rounded"></div>
+            <p class="text-gray-600">Engineered to bring unparalleled technological advancement to your operations.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Service 1 -->
+            <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6 group-hover:bg-brandBlue group-hover:text-white transition-all">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+                <h3 class="text-xl font-bold text-brandDark mb-3">Custom Software</h3>
+                <p class="text-gray-600 leading-relaxed text-sm">
+                    Tailored desktop, mobile, and enterprise backend systems constructed to run heavy processes fluidly and securely.
+                </p>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6 group-hover:bg-brandBlue group-hover:text-white transition-all">
+                    <i class="fa-solid fa-laptop-code"></i>
+                </div>
+                <h3 class="text-xl font-bold text-brandDark mb-3">Web Development</h3>
+                <p class="text-gray-600 leading-relaxed text-sm">
+                    High-end corporate websites, web applications, and e-commerce architectures built with complete SEO optimization and clean code.
+                </p>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6 group-hover:bg-brandBlue group-hover:text-white transition-all">
+                    <i class="fa-solid fa-cubes"></i>
+                </div>
+                <h3 class="text-xl font-bold text-brandDark mb-3">BIM & System UI Integration</h3>
+                <p class="text-gray-600 leading-relaxed text-sm">
+                    Specialized plugins, automation toolchains, and interactive architectural configuration dashboards built for modern industry standards.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Consultation Section -->
+    <section id="contact" class="bg-brandLight py-20 border-t border-gray-200/50">
+        <div class="max-w-4xl mx-auto px-6 text-center space-y-8">
+            <h2 class="text-3xl font-bold text-brandDark">Ready to Start Your Digital Transition?</h2>
+            <p class="text-gray-600 max-w-xl mx-auto">
+                Let us map out an execution plan for your next software or web development requirement.
+            </p>
+            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-left max-w-lg mx-auto">
+                <form class="space-y-4" onsubmit="event.preventDefault(); alert('Thank you! Trevion Team will contact you soon.');">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Company Name / Your Name</label>
+                        <input type="text" required class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:border-brandBlue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Email Address</label>
+                        <input type="email" required class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:border-brandBlue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Project Overview</label>
+                        <textarea rows="4" required class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:border-brandBlue" placeholder="Briefly explain your system requirement..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-brandDark text-white font-medium p-3.5 rounded-lg hover:bg-brandBlue transition-all shadow-md">
+                        Submit Briefing
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brandDark text-gray-400 py-12 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-sm">
+                &copy; 2026 Trevion Technologies. All rights reserved.
+            </div>
+            <div class="flex gap-6 text-lg">
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
