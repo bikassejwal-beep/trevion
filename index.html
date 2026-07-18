@@ -26,15 +26,14 @@
 
     <!-- Header / Navbar -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
-        <div class="max-w-7xl x-auto px-6 lg:px-8 h-20 flex items-center justify-between mx-auto">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <!-- Logo Image Placeholder -->
-                <img src="logo.png" alt="Trevion Technologies Logo" class="h-12 w-auto object-contain">
+                <img src="./logo.png" alt="Trevion Technologies Logo" class="h-10 md:h-12 w-auto object-contain block">
             </div>
             <nav class="hidden md:flex items-center gap-8 font-medium text-gray-600">
                 <a href="#home" class="hover:text-brandBlue transition-colors">Home</a>
                 <a href="#services" class="hover:text-brandBlue transition-colors">Services</a>
-                <a href="#about" class="hover:text-brandBlue transition-colors">About Us</a>
+                <a href="#projects" class="hover:text-brandBlue transition-colors">Projects</a>
                 <a href="#contact" class="bg-brandDark text-white px-5 py-2.5 rounded-lg hover:bg-brandBlue transition-all shadow-md">Get in Touch</a>
             </nav>
         </div>
@@ -62,7 +61,6 @@
                 </div>
             </div>
             <div class="hidden md:flex justify-center relative">
-                <!-- Tech Elements Graphic Illustration via CSS -->
                 <div class="w-80 h-80 rounded-2xl bg-gradient-to-tr from-brandBlue to-blue-500 opacity-20 absolute filter blur-2xl animate-pulse"></div>
                 <div class="relative border border-white/10 bg-white/5 p-8 rounded-2xl backdrop-blur-sm shadow-2xl w-full max-w-md">
                     <div class="flex items-center gap-2 mb-4 border-b border-white/10 pb-3">
@@ -97,7 +95,6 @@
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Service 1 -->
             <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
                 <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6 group-hover:bg-brandBlue group-hover:text-white transition-all">
                     <i class="fa-solid fa-code"></i>
@@ -108,7 +105,6 @@
                 </p>
             </div>
 
-            <!-- Service 2 -->
             <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
                 <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6 group-hover:bg-brandBlue group-hover:text-white transition-all">
                     <i class="fa-solid fa-laptop-code"></i>
@@ -118,35 +114,7 @@
                     High-end corporate websites, web applications, and e-commerce architectures built with complete SEO optimization and clean code.
                 </p>
             </div>
-<!-- Projects Portfolio Section -->
-    <section id="portfolio" class="py-20 max-w-7xl mx-auto px-6 lg:px-8 border-t border-gray-100">
-        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <h2 class="text-3xl font-bold text-brandDark tracking-tight">Our Launched Projects</h2>
-            <p class="text-gray-600">Trevion Technologies le successfully deploy gareka recent projects haru.</p>
-        </div>
 
-        <div class="grid md:grid-cols-2 gap-8">
-            <!-- Project Card 1 -->
-            <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all">
-                <div class="p-6 space-y-3">
-                    <span class="text-xs font-semibold text-brandBlue uppercase tracking-wider">Web Architecture</span>
-                    <h3 class="text-xl font-bold text-brandDark">E-Commerce Cloud Engine</h3>
-                    <p class="text-gray-600 text-sm">Nepal ko local business enterprise ko lagi banayeko highly scalable web app dynamic portal.</p>
-                </div>
-            </div>
-            
-            <!-- Project Card 2 -->
-            <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all">
-                <div class="p-6 space-y-3">
-                    <span class="text-xs font-semibold text-brandBlue uppercase tracking-wider">Custom Software</span>
-                    <h3 class="text-xl font-bold text-brandDark">Automated Billing System</h3>
-                    <p class="text-gray-600 text-sm">Fintech companies haruko transactional load optimized garna design gariएको desktop system utility software.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-            
-            <!-- Service 3 -->
             <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
                 <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6 group-hover:bg-brandBlue group-hover:text-white transition-all">
                     <i class="fa-solid fa-cubes"></i>
@@ -159,8 +127,59 @@
         </div>
     </section>
 
-    <!-- Contact & Consultation Section -->
-    <section id="contact" class="bg-brandLight py-20 border-t border-gray-200/50">
+    <!-- NEW: English Case Studies / Featured Projects Section -->
+    <section id="projects" class="py-24 bg-gray-100/50 border-t border-b border-gray-200/60">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <h2 class="text-3xl lg:text-4xl font-bold text-brandDark tracking-tight">Featured Case Studies</h2>
+                <div class="h-1 w-20 bg-brandBlue mx-auto rounded"></div>
+                <p class="text-gray-600">Explore premium engineering architectures developed across multiple tech stacks.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Case Study 1 -->
+                <div class="bg-white border border-gray-200/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all">
+                    <div class="p-8 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-brandBlue uppercase tracking-widest bg-brandBlue/10 px-2.5 py-1 rounded-md">Enterprise SaaS</span>
+                            <span class="text-xs text-gray-400 font-mono">Production Ready</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brandDark">Automated Cloud Invoicing Architecture</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            A highly optimized web engine built to process concurrent real-time digital payments, generating secure high-volume corporate ledger transactions fluidly.
+                        </p>
+                        <div class="flex gap-2 pt-2">
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">Next.js</span>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">PostgreSQL</span>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">Tailwind</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 2 -->
+                <div class="bg-white border border-gray-200/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all">
+                    <div class="p-8 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-brandBlue uppercase tracking-widest bg-brandBlue/10 px-2.5 py-1 rounded-md">Custom Workflow</span>
+                            <span class="text-xs text-gray-400 font-mono">Completed</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brandDark">Intelligent Resource Management Tool</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Custom performance-critical workflow software deployed for handling relational operational tracking databases, minimizing background latency efficiently.
+                        </p>
+                        <div class="flex gap-2 pt-2">
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">Python</span>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">FastAPI</span>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">Docker</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-brandLight py-20">
         <div class="max-w-4xl mx-auto px-6 text-center space-y-8">
             <h2 class="text-3xl font-bold text-brandDark">Ready to Start Your Digital Transition?</h2>
             <p class="text-gray-600 max-w-xl mx-auto">
