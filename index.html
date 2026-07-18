@@ -230,9 +230,13 @@
                 Let us map out an execution plan for your next software or web development requirement.
             </p>
             <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-left max-w-lg mx-auto">
-                <!-- Updated Functional Web3Forms -->
-                <form action="https://api.web3forms.com/submit" method="POST" class="space-y-4">
-                    <!-- Web3Forms Integration Key -->
+                
+                <!-- Feedback Message Container -->
+                <div id="form-result" class="hidden mb-4 p-4 rounded-lg text-sm font-medium"></div>
+
+                <!-- Async Form Handled via JavaScript -->
+                <form id="web3form" class="space-y-4">
+                    <!-- Integration Key -->
                     <input type="hidden" name="access_key" value="7128cf5f-1628-4629-882b-1e37694191d0">
 
                     <div>
@@ -247,8 +251,8 @@
                         <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Project Overview</label>
                         <textarea rows="4" name="message" required class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:border-brandBlue" placeholder="Briefly explain your system requirement..."></textarea>
                     </div>
-                    <button type="submit" class="w-full bg-brandDark text-white font-medium p-3.5 rounded-lg hover:bg-brandBlue transition-all shadow-md">
-                        Submit Briefing
+                    <button type="submit" id="submit-btn" class="w-full bg-brandDark text-white font-medium p-3.5 rounded-lg hover:bg-brandBlue transition-all shadow-md flex justify-center items-center gap-2">
+                        <span>Submit Briefing</span>
                     </button>
                 </form>
             </div>
@@ -268,6 +272,60 @@
             </div>
         </div>
     </footer>
+
+    <!-- Web3Forms AJAX Handling Script -->
+    <script>
+        const form = document.getElementById('web3form');
+        const resultContainer = document.getElementById('form-result');
+        const submitBtn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Set Loading UI State
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i> <span>Processing...</span>`;
+            resultContainer.className = "hidden mb-4 p-4 rounded-lg text-sm font-medium";
+
+            const formData = new FormData(form);
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
+            })
+            .then(async (response) => {
+                let res = await response.json();
+                if (response.status == 200) {
+                    resultContainer.classList.remove('hidden');
+                    resultContainer.classList.add('bg-green-50', 'text-green-700', 'border', 'border-green-200');
+                    resultContainer.innerText = "Briefing successfully submitted! We will contact you soon.";
+                    form.reset();
+                } else {
+                    console.log(response);
+                    resultContainer.classList.remove('hidden');
+                    resultContainer.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+                    resultContainer.innerText = res.message || "Submission failed. Please check your access key.";
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                resultContainer.classList.remove('hidden');
+                resultContainer.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+                resultContainer.innerText = "Network error. Please try again later.";
+            })
+            .then(() => {
+                // Reset Button State
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `Submit Briefing`;
+            });
+        });
+    </script>
 
 </body>
 </html>
