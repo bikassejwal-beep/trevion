@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trevion Technologies | Software & Web Development</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Trevion Technologies | Software, Web, App & Automation Solutions</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,67 +18,186 @@
             }
         }
     </script>
-    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Header / Navbar with Mobile Menu -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; }
+
+        #preloader {
+            position: fixed; inset: 0; z-index: 9999;
+            background: #0B2545;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hidden { opacity: 0; visibility: hidden; }
+        .loader-ring {
+            width: 56px; height: 56px;
+            border: 4px solid rgba(19,150,230,0.2);
+            border-top-color: #1396E6;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #mainHeader { transition: all 0.35s ease; }
+        #mainHeader.scrolled { box-shadow: 0 4px 25px rgba(11,37,69,0.08); }
+        #mainHeader.scrolled .nav-inner { height: 4.2rem; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { opacity: 0; animation: fadeUp 0.8s ease forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.3s; }
+        .delay-3 { animation-delay: 0.5s; }
+        .delay-4 { animation-delay: 0.7s; }
+
+        @keyframes floatBlob {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(15px,-20px) scale(1.08); }
+        }
+        .floating-blob { animation: floatBlob 6s ease-in-out infinite; }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .code-card { animation: cardFloat 4.5s ease-in-out infinite; }
+
+        @keyframes blinkCursor { 50% { opacity: 0; } }
+        .type-cursor { animation: blinkCursor 0.9s step-end infinite; }
+
+        .gradient-text {
+            background: linear-gradient(90deg,#1396E6,#5ec8ff,#1396E6);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+        @keyframes shimmer { to { background-position: 200% center; } }
+
+        .btn-shine { position: relative; overflow: hidden; }
+        .btn-shine::before {
+            content: '';
+            position: absolute; top: 0; left: -75%;
+            width: 50%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.6s ease;
+        }
+        .btn-shine:hover::before { left: 125%; }
+
+        .service-card {
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px -12px rgba(19,150,230,0.25);
+            border-color: #1396E6;
+        }
+        .service-icon { transition: transform 0.4s ease, background 0.4s ease, color 0.4s ease; }
+        .service-card:hover .service-icon { transform: rotate(-8deg) scale(1.1); }
+
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: ''; position: absolute; left: 0; bottom: -4px;
+            width: 0%; height: 2px; background: #1396E6;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        .form-input { transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; }
+        .form-input:focus { box-shadow: 0 0 0 4px rgba(19,150,230,0.12); transform: translateY(-2px); }
+
+        #scrollTopBtn {
+            position: fixed; bottom: 28px; right: 28px; z-index: 40;
+            width: 46px; height: 46px; border-radius: 9999px;
+            background: #0B2545; color: white;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 20px rgba(11,37,69,0.3);
+            opacity: 0; visibility: hidden; transform: translateY(15px);
+            transition: all 0.35s ease;
+        }
+        #scrollTopBtn.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        #scrollTopBtn:hover { background: #1396E6; transform: translateY(-4px); }
+
+        .social-icon { transition: transform 0.3s ease, color 0.3s ease; }
+        .social-icon:hover { transform: translateY(-4px) scale(1.15); }
+
+        /* Process step connector line */
+        .process-step { position: relative; }
+        .process-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 28px; left: 100%;
+            width: 100%; height: 2px;
+            background: repeating-linear-gradient(90deg,#1396E6 0,#1396E6 6px,transparent 6px,transparent 12px);
+            display: none;
+        }
+        @media(min-width:1024px){ .process-step:not(:last-child)::after{ display:block; } }
+
+        /* Marquee for tech stack */
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marquee 25s linear infinite;
+        }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <div id="preloader"><div class="loader-ring"></div></div>
+
+    <!-- Header -->
+    <header id="mainHeader" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 nav-inner h-20 flex items-center justify-between transition-all duration-300">
             <div class="flex items-center gap-3">
                 <img src="./logo.png" alt="Trevion Technologies Logo" class="h-10 md:h-12 w-auto object-contain block">
             </div>
-            
-            <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center gap-8 font-medium text-gray-600">
-                <a href="#home" class="hover:text-brandBlue transition-colors">Home</a>
-                <a href="#services" class="hover:text-brandBlue transition-colors">Services</a>
-                <a href="#projects" class="hover:text-brandBlue transition-colors">Projects</a>
-                <a href="#about" class="hover:text-brandBlue transition-colors">About Us</a>
-                <a href="#contact" class="bg-brandDark text-white px-5 py-2.5 rounded-lg hover:bg-brandBlue transition-all shadow-md">Get in Touch</a>
+                <a href="#home" class="nav-link hover:text-brandBlue transition-colors">Home</a>
+                <a href="#services" class="nav-link hover:text-brandBlue transition-colors">Services</a>
+                <a href="#automation" class="nav-link hover:text-brandBlue transition-colors">Automation</a>
+                <a href="#about" class="nav-link hover:text-brandBlue transition-colors">About Us</a>
+                <a href="#contact" class="btn-shine bg-brandDark text-white px-5 py-2.5 rounded-lg hover:bg-brandBlue transition-all shadow-md">Get in Touch</a>
             </nav>
-
-            <!-- Mobile Hamburger Button -->
-            <button id="menu-btn" class="md:hidden text-brandDark text-2xl p-2 focus:outline-none">
+            <button id="mobileMenuBtn" class="md:hidden text-brandDark text-2xl">
                 <i class="fa-solid fa-bars"></i>
             </button>
         </div>
-
-        <!-- Full-Screen Mobile Menu Overlay -->
-        <div id="mobile-menu" class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col">
-            <!-- Mobile Menu Header -->
-            <div class="h-20 px-6 flex items-center justify-between border-b border-gray-100">
-                <img src="./logo.png" alt="Trevion Technologies Logo" class="h-10 w-auto object-contain">
-                <button id="close-btn" class="text-gray-500 border border-gray-200 rounded-lg p-2.5 hover:bg-gray-50 focus:outline-none">
-                    <i class="fa-solid fa-xmark text-xl w-5 h-5 flex items-center justify-center"></i>
-                </button>
-            </div>
-            <!-- Mobile Menu Links -->
-            <nav class="flex flex-col text-lg font-semibold text-brandDark divide-y divide-gray-100">
-                <a href="#home" class="mobile-link bg-brandBlue text-white px-6 py-4">Home</a>
-                <a href="#about" class="mobile-link px-6 py-4 hover:bg-brandLight transition-colors">About Us</a>
-                <a href="#services" class="mobile-link px-6 py-4 hover:bg-brandLight transition-colors">Services</a>
-                <a href="#projects" class="mobile-link px-6 py-4 hover:bg-brandLight transition-colors">Projects</a>
-                <a href="#contact" class="mobile-link px-6 py-4 hover:bg-brandLight transition-colors">Contact us</a>
-            </nav>
+        <div id="mobileMenu" class="md:hidden hidden flex-col gap-4 px-6 pb-6 font-medium text-gray-600 bg-white border-t border-gray-100">
+            <a href="#home" class="py-1">Home</a>
+            <a href="#services" class="py-1">Services</a>
+            <a href="#automation" class="py-1">Automation</a>
+            <a href="#about" class="py-1">About Us</a>
+            <a href="#contact" class="py-1 text-brandBlue font-semibold">Get in Touch</a>
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section id="home" class="relative overflow-hidden bg-gradient-to-br from-brandDark via-[#132237] to-brandDark text-white py-24 lg:py-32">
         <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
         <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 grid md:grid-cols-2 gap-12 items-center">
             <div class="space-y-6">
-                <span class="text-brandBlue font-semibold uppercase tracking-wider text-sm bg-brandBlue/10 px-3 py-1 rounded-full border border-brandBlue/20">Empowering Digital Innovation</span>
-                <h1 class="text-4xl lg:text-6xl font-bold tracking-tight leading-tight">
-                    We Build Enterprise <span class="text-brandBlue">Software</span> & Modern Websites
+                <span class="fade-up delay-1 inline-block text-brandBlue font-semibold uppercase tracking-wider text-sm bg-brandBlue/10 px-3 py-1 rounded-full border border-brandBlue/20">Software · Web · App · Automation</span>
+                <h1 class="fade-up delay-2 text-4xl lg:text-6xl font-bold tracking-tight leading-tight">
+                    Engineering Smart Systems Through <span class="gradient-text">Automation</span>
                 </h1>
-                <p class="text-gray-300 text-lg leading-relaxed max-w-xl">
-                    At Trevion Technologies, we transform complex business challenges into seamless, scalable digital solutions. From custom software architectural builds to high-performance web engineering.
+                <p class="fade-up delay-3 text-gray-300 text-lg leading-relaxed max-w-xl">
+                    Trevion Technologies designs and builds custom software, websites, mobile apps, and intelligent automation systems that eliminate manual work and scale your operations.
                 </p>
-                <div class="flex flex-wrap gap-4 pt-2">
-                    <a href="#services" class="bg-brandBlue text-white font-medium px-6 py-3.5 rounded-lg shadow-lg hover:bg-blue-500 transition-all flex items-center gap-2">
+                <div class="fade-up delay-4 flex flex-wrap gap-4 pt-2">
+                    <a href="#services" class="btn-shine bg-brandBlue text-white font-medium px-6 py-3.5 rounded-lg shadow-lg hover:bg-blue-500 transition-all flex items-center gap-2">
                         Our Services <i class="fa-solid fa-arrow-right text-sm"></i>
                     </a>
                     <a href="#contact" class="border border-gray-400 text-white font-medium px-6 py-3.5 rounded-lg hover:bg-white/10 transition-all">
@@ -88,189 +206,216 @@
                 </div>
             </div>
             <div class="hidden md:flex justify-center relative">
-                <div class="w-80 h-80 rounded-2xl bg-gradient-to-tr from-brandBlue to-blue-500 opacity-20 absolute filter blur-2xl animate-pulse"></div>
-                <div class="relative border border-white/10 bg-white/5 p-8 rounded-2xl backdrop-blur-sm shadow-2xl w-full max-w-md">
+                <div class="floating-blob w-80 h-80 rounded-2xl bg-gradient-to-tr from-brandBlue to-blue-500 opacity-20 absolute filter blur-2xl"></div>
+                <div class="code-card relative border border-white/10 bg-white/5 p-8 rounded-2xl backdrop-blur-sm shadow-2xl w-full max-w-md">
                     <div class="flex items-center gap-2 mb-4 border-b border-white/10 pb-3">
                         <span class="w-3 h-3 rounded-full bg-red-500"></span>
                         <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
                         <span class="w-3 h-3 rounded-full bg-green-500"></span>
-                        <span class="text-xs text-gray-400 ml-2">trevion_architecture.config</span>
+                        <span class="text-xs text-gray-400 ml-2">automation_pipeline.js</span>
                     </div>
                     <pre class="text-xs text-brandBlue font-mono space-y-1">
-<span>const company = "Trevion Technologies";</span>
-<span>const capabilities = [</span>
-<span>  "Custom Software Development",</span>
-<span>  "Advanced Web Architecture",</span>
-<span>  "Scalable UI/UX Engineering"</span>
-<span>];</span>
+<span>const workflow = new AutomationEngine();</span>
 <span></span>
-<span>function deploy() {</span>
-<span>  return buildDigitalFuture(capabilities);</span>
-<span>}</span>
+<span>workflow.connect([</span>
+<span>  "Software Systems",</span>
+<span>  "Web & Mobile Apps",</span>
+<span>  "BIM Toolchains"</span>
+<span>]);</span>
+<span></span>
+<span>workflow.run(() => scaleBusiness());<span class="type-cursor">|</span></span>
                     </pre>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
+    <!-- Tech marquee -->
+    <div class="bg-white border-b border-gray-100 py-5 overflow-hidden">
+        <div class="marquee-track gap-16 text-gray-400 font-semibold text-sm uppercase tracking-wider">
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-robot text-brandBlue"></i> Process Automation</span>
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-code text-brandBlue"></i> Custom Software</span>
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-mobile-screen text-brandBlue"></i> App Development</span>
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-laptop-code text-brandBlue"></i> Web Engineering</span>
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-cubes text-brandBlue"></i> BIM Integration</span>
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-gears text-brandBlue"></i> Workflow Scripting</span>
+            <!-- duplicate for seamless loop -->
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-robot text-brandBlue"></i> Process Automation</span>
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-code text-brandBlue"></i> Custom Software</span>
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-mobile-screen text-brandBlue"></i> App Development</span>
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-laptop-code text-brandBlue"></i> Web Engineering</span>
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-cubes text-brandBlue"></i> BIM Integration</span>
+            <span class="flex items-center gap-2 px-4"><i class="fa-solid fa-gears text-brandBlue"></i> Workflow Scripting</span>
+        </div>
+    </div>
+
+    <!-- Services -->
     <section id="services" class="py-24 max-w-7xl mx-auto px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div data-aos="fade-up" class="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <h2 class="text-3xl lg:text-4xl font-bold text-brandDark tracking-tight">Our Core Expertise</h2>
             <div class="h-1 w-20 bg-brandBlue mx-auto rounded"></div>
             <p class="text-gray-600">Engineered to bring unparalleled technological advancement to your operations.</p>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
-                <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6 group-hover:bg-brandBlue group-hover:text-white transition-all">
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div data-aos="fade-up" data-aos-delay="0" class="service-card bg-white border border-gray-100 p-8 rounded-2xl shadow-sm">
+                <div class="service-icon w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6">
                     <i class="fa-solid fa-code"></i>
                 </div>
                 <h3 class="text-xl font-bold text-brandDark mb-3">Custom Software</h3>
                 <p class="text-gray-600 leading-relaxed text-sm">
-                    Tailored desktop, mobile, and enterprise backend systems constructed to run heavy processes fluidly and securely.
+                    Tailored desktop and enterprise backend systems constructed to run heavy processes fluidly and securely.
                 </p>
             </div>
 
-            <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
-                <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6 group-hover:bg-brandBlue group-hover:text-white transition-all">
+            <div data-aos="fade-up" data-aos-delay="100" class="service-card bg-white border border-gray-100 p-8 rounded-2xl shadow-sm">
+                <div class="service-icon w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6">
                     <i class="fa-solid fa-laptop-code"></i>
                 </div>
-                <h3 class="text-xl font-bold text-brandDark mb-3">Web Development</h3>
+                <h3 class="text-xl font-bold text-brandDark mb-3">Web & App Development</h3>
                 <p class="text-gray-600 leading-relaxed text-sm">
-                    High-end corporate websites, web applications, and e-commerce architectures built with complete SEO optimization and clean code.
+                    High-end websites, web applications, and cross-platform mobile apps built with clean, SEO-optimized code.
                 </p>
             </div>
 
-            <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
-                <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6 group-hover:bg-brandBlue group-hover:text-white transition-all">
+            <div data-aos="fade-up" data-aos-delay="200" class="service-card bg-white border border-gray-100 p-8 rounded-2xl shadow-sm">
+                <div class="service-icon w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <h3 class="text-xl font-bold text-brandDark mb-3">Process Automation</h3>
+                <p class="text-gray-600 leading-relaxed text-sm">
+                    Custom scripts, workflow automation, and system integrations that eliminate repetitive manual work.
+                </p>
+            </div>
+
+            <div data-aos="fade-up" data-aos-delay="300" class="service-card bg-white border border-gray-100 p-8 rounded-2xl shadow-sm">
+                <div class="service-icon w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-6">
                     <i class="fa-solid fa-cubes"></i>
                 </div>
-                <h3 class="text-xl font-bold text-brandDark mb-3">BIM & System UI Integration</h3>
+                <h3 class="text-xl font-bold text-brandDark mb-3">BIM & System Integration</h3>
                 <p class="text-gray-600 leading-relaxed text-sm">
-                    Specialized plugins, automation toolchains, and interactive architectural configuration dashboards built for modern industry standards.
+                    Specialized Revit/Dynamo plugins and interactive architectural configuration dashboards.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- Featured Projects Section -->
-    <section id="projects" class="py-24 bg-gray-100/50 border-t border-gray-200/60">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                <h2 class="text-3xl lg:text-4xl font-bold text-brandDark tracking-tight">Featured Case Studies</h2>
-                <div class="h-1 w-20 bg-brandBlue mx-auto rounded"></div>
-                <p class="text-gray-600">Explore premium engineering architectures developed across multiple tech stacks.</p>
+    <!-- Automation deep-dive section -->
+    <section id="automation" class="py-24 bg-brandDark text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:18px_18px]"></div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            <div data-aos="fade-up" class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="text-brandBlue font-semibold uppercase tracking-wider text-sm">Automation First</span>
+                <h2 class="text-3xl lg:text-4xl font-bold tracking-tight">How We Automate Your Workflow</h2>
+                <p class="text-gray-300">From repetitive engineering tasks to full business processes — we script it, connect it, and let it run itself.</p>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                <div class="bg-white border border-gray-200/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all">
-                    <div class="p-8 space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-brandBlue uppercase tracking-widest bg-brandBlue/10 px-2.5 py-1 rounded-md">Enterprise SaaS</span>
-                            <span class="text-xs text-gray-400 font-mono">Production Ready</span>
-                        </div>
-                        <h3 class="text-2xl font-bold text-brandDark">Automated Cloud Invoicing Architecture</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed">
-                            A highly optimized web engine built to process concurrent real-time digital payments, generating secure high-volume corporate ledger transactions fluidly.
-                        </p>
-                        <div class="flex gap-2 pt-2">
-                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">Next.js</span>
-                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">PostgreSQL</span>
-                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">Tailwind</span>
-                        </div>
+            <div class="grid lg:grid-cols-4 gap-8 mb-16">
+                <div data-aos="fade-up" data-aos-delay="0" class="process-step text-center">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-brandBlue flex items-center justify-center text-2xl mb-4 relative z-10">
+                        <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
+                    <h4 class="font-bold mb-2">1. Analyze</h4>
+                    <p class="text-gray-400 text-sm">Map out repetitive tasks and bottlenecks in your current workflow.</p>
                 </div>
-
-                <div class="bg-white border border-gray-200/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all">
-                    <div class="p-8 space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-brandBlue uppercase tracking-widest bg-brandBlue/10 px-2.5 py-1 rounded-md">Custom Workflow</span>
-                            <span class="text-xs text-gray-400 font-mono">Completed</span>
-                        </div>
-                        <h3 class="text-2xl font-bold text-brandDark">Intelligent Resource Management Tool</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed">
-                            Custom performance-critical workflow software deployed for handling relational operational tracking databases, minimizing background latency efficiently.
-                        </p>
-                        <div class="flex gap-2 pt-2">
-                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">Python</span>
-                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">FastAPI</span>
-                            <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">Docker</span>
-                        </div>
+                <div data-aos="fade-up" data-aos-delay="150" class="process-step text-center">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-brandBlue flex items-center justify-center text-2xl mb-4 relative z-10">
+                        <i class="fa-solid fa-code-branch"></i>
                     </div>
+                    <h4 class="font-bold mb-2">2. Script</h4>
+                    <p class="text-gray-400 text-sm">Build custom automation scripts, plugins, and tool integrations.</p>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="300" class="process-step text-center">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-brandBlue flex items-center justify-center text-2xl mb-4 relative z-10">
+                        <i class="fa-solid fa-vial"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">3. Test</h4>
+                    <p class="text-gray-400 text-sm">Validate against real data and edge cases before rollout.</p>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="450" class="process-step text-center">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-brandBlue flex items-center justify-center text-2xl mb-4 relative z-10">
+                        <i class="fa-solid fa-rocket"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">4. Deploy</h4>
+                    <p class="text-gray-400 text-sm">Ship the automation and hand over documentation and support.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div data-aos="zoom-in" data-aos-delay="0" class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm">
+                    <i class="fa-solid fa-gears text-brandBlue text-2xl mb-4"></i>
+                    <h4 class="font-bold mb-2">Engineering Automation</h4>
+                    <p class="text-gray-400 text-sm">Revit/Dynamo scripts for tagging, family placement, and model QA.</p>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="150" class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm">
+                    <i class="fa-solid fa-file-export text-brandBlue text-2xl mb-4"></i>
+                    <h4 class="font-bold mb-2">Data & Reporting</h4>
+                    <p class="text-gray-400 text-sm">Automated data extraction, report generation, and dashboards.</p>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="300" class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm">
+                    <i class="fa-solid fa-plug text-brandBlue text-2xl mb-4"></i>
+                    <h4 class="font-bold mb-2">Tool Integration</h4>
+                    <p class="text-gray-400 text-sm">Connecting separate software tools into one seamless pipeline.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Us Section -->
-    <section id="about" class="py-24 max-w-7xl mx-auto px-6 lg:px-8 border-t border-gray-200/60">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-            <div class="space-y-6">
-                <h2 class="text-3xl lg:text-4xl font-bold text-brandDark tracking-tight">About Trevion Technologies</h2>
-                <div class="h-1 w-16 bg-brandBlue rounded"></div>
+    <!-- About -->
+    <section id="about" class="py-20 bg-white border-t border-gray-100">
+        <div class="max-w-5xl mx-auto px-6 lg:px-8 grid md:grid-cols-2 gap-10 items-center">
+            <div data-aos="fade-right" class="space-y-4">
+                <span class="text-brandBlue font-semibold uppercase tracking-wider text-sm">Who We Are</span>
+                <h2 class="text-3xl font-bold text-brandDark">Building the Future, One System at a Time</h2>
                 <p class="text-gray-600 leading-relaxed">
-                    Trevion Technologies is a dedicated freelancing technology venture focused on engineering custom software environments, robust web solutions, and automated workflows. We bridges client operational logic into structural, highly functional user experiences.
-                </p>
-                <p class="text-gray-600 leading-relaxed">
-                    Whether you need a dynamic custom interface panel, clean architectural configurations, or complete SEO optimized platforms, we deliver professional development execution.
+                    Trevion Technologies is driven by a passion for solving complex technical problems with clean, scalable, and future-ready engineering — bridging software, web, mobile, and industry-specific automation.
                 </p>
             </div>
-            <!-- Contact Mediums Card Container -->
-            <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-md space-y-6">
-                <h3 class="text-xl font-bold text-brandDark">Direct Contact Mediums</h3>
-                <p class="text-gray-500 text-sm">Reach out directly via the following channels for consulting briefings:</p>
-                
-                <div class="space-y-4">
-                    <!-- Email Channel -->
-                    <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100 hover:border-brandBlue transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-brandBlue/10 flex items-center justify-center text-brandBlue group-hover:bg-brandBlue group-hover:text-white transition-all">
-                            <i class="fa-solid fa-envelope"></i>
-                        </div>
-                        <div>
-                            <span class="block text-xs text-gray-400 font-semibold uppercase">Official Email</span>
-                            <a href="mailto:info.trevion@gmail.com" class="text-sm font-medium text-brandDark hover:text-brandBlue transition-colors">info.trevion@gmail.com</a>
-                        </div>
-                    </div>
-
-                    <!-- Contact Phone Channel -->
-                    <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100 hover:border-brandBlue transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-brandBlue/10 flex items-center justify-center text-brandBlue group-hover:bg-brandBlue group-hover:text-white transition-all">
-                            <i class="fa-solid fa-phone"></i>
-                        </div>
-                        <div>
-                            <span class="block text-xs text-gray-400 font-semibold uppercase">Contact Number</span>
-                            <a href="tel:+9779763632630" class="text-sm font-medium text-brandDark hover:text-brandBlue transition-colors">+977 9763632630</a>
-                        </div>
-                    </div>
+            <div data-aos="fade-left" class="grid grid-cols-2 gap-6">
+                <div class="text-center p-6 bg-brandLight rounded-2xl">
+                    <div class="text-3xl font-bold text-brandDark">100%</div>
+                    <div class="text-xs text-gray-500 uppercase mt-1">Custom Built</div>
+                </div>
+                <div class="text-center p-6 bg-brandLight rounded-2xl">
+                    <div class="text-3xl font-bold text-brandDark">24/7</div>
+                    <div class="text-xs text-gray-500 uppercase mt-1">Support Ready</div>
+                </div>
+                <div class="text-center p-6 bg-brandLight rounded-2xl">
+                    <div class="text-3xl font-bold text-brandDark">Automated</div>
+                    <div class="text-xs text-gray-500 uppercase mt-1">Workflows</div>
+                </div>
+                <div class="text-center p-6 bg-brandLight rounded-2xl">
+                    <div class="text-3xl font-bold text-brandDark">Scalable</div>
+                    <div class="text-xs text-gray-500 uppercase mt-1">Architecture</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Form Section -->
+    <!-- Contact -->
     <section id="contact" class="bg-brandLight py-20 border-t border-gray-200/50">
         <div class="max-w-4xl mx-auto px-6 text-center space-y-8">
-            <h2 class="text-3xl font-bold text-brandDark">Ready to Start Your Digital Transition?</h2>
-            <p class="text-gray-600 max-w-xl mx-auto">
-                Let us map out an execution plan for your next software or web development requirement.
-            </p>
-            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-left max-w-lg mx-auto">
-                <!-- Formspree Endpoint Active -->
+            <div data-aos="fade-up">
+                <h2 class="text-3xl font-bold text-brandDark">Ready to Start Your Digital Transition?</h2>
+                <p class="text-gray-600 max-w-xl mx-auto mt-3">
+                    Let us map out an execution plan for your next software, app, web, or automation requirement.
+                </p>
+            </div>
+            <div data-aos="zoom-in" class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-left max-w-lg mx-auto">
                 <form action="https://formspree.io/f/mgogkaqg" method="POST" class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Company Name / Your Name</label>
-                        <input type="text" name="name" required class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:border-brandBlue">
+                        <input type="text" name="name" required class="form-input w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:border-brandBlue">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Email Address</label>
-                        <input type="email" name="_replyto" required class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:border-brandBlue">
+                        <input type="email" name="_replyto" required class="form-input w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:border-brandBlue">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Project Overview</label>
-                        <textarea rows="4" name="message" required class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:border-brandBlue" placeholder="Briefly explain your system requirement..."></textarea>
+                        <textarea rows="4" name="message" required class="form-input w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:border-brandBlue" placeholder="Briefly explain your system requirement..."></textarea>
                     </div>
-                    <button type="submit" class="w-full bg-brandDark text-white font-medium p-3.5 rounded-lg hover:bg-brandBlue transition-all shadow-md flex justify-center items-center gap-2">
+                    <button type="submit" class="btn-shine w-full bg-brandDark text-white font-medium p-3.5 rounded-lg hover:bg-brandBlue transition-all shadow-md">
                         Submit Briefing
                     </button>
                 </form>
@@ -281,39 +426,43 @@
     <!-- Footer -->
     <footer class="bg-brandDark text-gray-400 py-12 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="text-sm">
-                &copy; 2026 Trevion Technologies. All rights reserved.
-            </div>
+            <div class="text-sm">&copy; 2026 Trevion Technologies. All rights reserved.</div>
             <div class="flex gap-6 text-lg">
-                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-linkedin"></i></a>
-                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-github"></i></a>
-                <a href="#" class="hover:text-white transition-colors"><i class="fa-solid fa-envelope"></i></a>
+                <a href="#" class="social-icon hover:text-white"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" class="social-icon hover:text-white"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="social-icon hover:text-white"><i class="fa-solid fa-envelope"></i></a>
             </div>
         </div>
     </footer>
 
-    <!-- Full-Screen Mobile Menu Toggler Script -->
+    <button id="scrollTopBtn"><i class="fa-solid fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const closeBtn = document.getElementById('close-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
+        AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic' });
 
-        // Opening Overlay Navbar Menu
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('translate-x-full');
+        window.addEventListener('load', () => {
+            document.getElementById('preloader').classList.add('hidden');
         });
 
-        // Closing Overlay Menu using X Mark Button
-        closeBtn.addEventListener('click', () => {
-            mobileMenu.classList.add('translate-x-full');
+        const header = document.getElementById('mainHeader');
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) {
+                header.classList.add('scrolled');
+                scrollTopBtn.classList.add('show');
+            } else {
+                header.classList.remove('scrolled');
+                scrollTopBtn.classList.remove('show');
+            }
         });
+        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-        // Hiding Menu Overlay when Anchor Link Target Triggered
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('translate-x-full');
-            });
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('flex');
         });
     </script>
 
