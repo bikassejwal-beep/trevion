@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revit & BIM Automation | Dynamo Scripts | Trevion Technologies</title>
+  <meta name="description" content="Explore Revit, Dynamo, and BIM automation for repetitive model tasks, tagging workflows, model data checks, and structured information extraction with Trevion Technologies.">
+  <meta name="author" content="Trevion Technologies">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://trevion-technologies.onrender.com/revit-bim-automation.html">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+  <meta property="og:title" content="Revit & BIM Automation | Trevion Technologies">
+  <meta property="og:description" content="Practical Revit and Dynamo workflows for repeated BIM tasks, model data checks, tagging, and information extraction.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://trevion-technologies.onrender.com/revit-bim-automation.html">
+  <meta property="og:image" content="https://trevion-technologies.onrender.com/logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandDark: '#0B2545',
+            brandBlue: '#1396E6',
+            brandLight: '#EEF4F8'
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Revit and BIM Automation",
+    "serviceType": "Revit, Dynamo, and BIM Workflow Automation",
+    "description": "Practical automation planning for repetitive Revit and BIM workflows, including tagging tasks, structured model data checks, and information extraction where supported by the project setup.",
+    "provider": {
+      "@type": "Organization",
+      "name": "Trevion Technologies",
+      "url": "https://trevion-technologies.onrender.com/",
+      "logo": "https://trevion-technologies.onrender.com/logo.png"
+    },
+    "url": "https://trevion-technologies.onrender.com/revit-bim-automation.html"
+  }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between gap-6">
+      <a href="index.html" class="flex items-center gap-3" aria-label="Trevion Technologies home">
+        <img src="./logo.png" alt="Trevion Technologies" class="h-10 md:h-12 w-auto object-contain">
+      </a>
+      <nav class="hidden md:flex items-center gap-7 font-medium text-gray-600" aria-label="Main navigation">
+        <a href="index.html#services" class="hover:text-brandBlue transition-colors">Services</a>
+        <a href="web-development.html" class="hover:text-brandBlue transition-colors">Website Development</a>
+        <a href="business-process-automation.html" class="hover:text-brandBlue transition-colors">Business Automation</a>
+        <a href="index.html#contact" class="bg-brandDark text-white px-5 py-2.5 rounded-lg hover:bg-brandBlue transition-colors">Discuss a Project</a>
+      </nav>
+      <a href="index.html#contact" class="md:hidden bg-brandDark text-white px-4 py-2 rounded-lg text-sm">Contact</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="bg-gradient-to-br from-brandDark via-[#132237] to-brandDark text-white py-20 lg:py-28">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="text-brandBlue font-semibold uppercase tracking-wider text-sm mb-4">Revit, Dynamo & BIM Automation</p>
+          <h1 class="text-4xl lg:text-6xl font-bold tracking-tight leading-tight">Make repeated BIM tasks <span class="text-sky-300">more consistent</span></h1>
+          <p class="text-gray-300 text-lg leading-relaxed mt-6 max-w-2xl">Trevion Technologies explores practical automation for defined Revit and BIM workflows—from repetitive tagging and model-data checks to structured information extraction. Each approach depends on the project setup, model standards, and available tools.</p>
+          <div class="flex flex-wrap gap-4 mt-8">
+            <a href="index.html#contact" class="bg-brandBlue text-white font-medium px-6 py-3.5 rounded-lg hover:bg-blue-500 transition-colors"><i class="fa-solid fa-paper-plane mr-2"></i>Discuss a BIM Workflow</a>
+            <a href="#services" class="border border-gray-400 text-white font-medium px-6 py-3.5 rounded-lg hover:bg-white/10 transition-colors">Explore Capabilities</a>
+          </div>
+        </div>
+        <div class="bg-slate-900/80 border border-white/10 rounded-2xl p-7 shadow-2xl">
+          <div class="flex items-center gap-2 border-b border-white/10 pb-4 mb-5">
+            <span class="w-3 h-3 rounded-full bg-red-400"></span><span class="w-3 h-3 rounded-full bg-yellow-400"></span><span class="w-3 h-3 rounded-full bg-green-400"></span>
+            <span class="ml-auto text-xs text-gray-400 font-mono">BIM WORKFLOW OVERVIEW</span>
+          </div>
+          <div class="space-y-4">
+            <div class="rounded-xl border border-white/10 p-4 flex gap-4 items-start"><i class="fa-solid fa-tags text-brandBlue text-2xl mt-1"></i><div><h2 class="font-semibold">Repeatable model tasks</h2><p class="text-gray-400 text-sm mt-1">Review tagging, parameter updates, or family-placement steps for automation potential.</p></div></div>
+            <div class="rounded-xl border border-white/10 p-4 flex gap-4 items-start"><i class="fa-solid fa-list-check text-brandBlue text-2xl mt-1"></i><div><h2 class="font-semibold">Structured data checks</h2><p class="text-gray-400 text-sm mt-1">Define checks for required information, naming rules, and model consistency.</p></div></div>
+            <div class="rounded-xl border border-white/10 p-4 flex gap-4 items-start"><i class="fa-solid fa-file-export text-brandBlue text-2xl mt-1"></i><div><h2 class="font-semibold">Information extraction</h2><p class="text-gray-400 text-sm mt-1">Organize model data into schedules or reports where the model and tools support it.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="py-20 lg:py-24">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center mb-14">
+          <h2 class="text-3xl lg:text-4xl font-bold text-brandDark">Revit and BIM automation capabilities</h2>
+          <div class="h-1 w-20 bg-brandBlue mx-auto rounded mt-5 mb-6"></div>
+          <p class="text-gray-600 leading-relaxed">Start with a clearly defined task. We can review the model setup, expected output, and suitable tools before deciding what should be automated.</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <article class="bg-white border border-gray-100 p-7 rounded-2xl shadow-sm">
+            <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-5"><i class="fa-solid fa-tags"></i></div>
+            <h3 class="text-xl font-bold text-brandDark mb-3">Tagging and Repetitive Tasks</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Assess repetitive tagging, placement, or update steps and define rules so that an automation can be checked against the intended model standards.</p>
+          </article>
+          <article class="bg-white border border-gray-100 p-7 rounded-2xl shadow-sm">
+            <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-5"><i class="fa-solid fa-diagram-project"></i></div>
+            <h3 class="text-xl font-bold text-brandDark mb-3">Dynamo Workflow Scripts</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Plan Dynamo graphs for defined model operations, with clear inputs, expected outputs, and review steps suited to the project requirements.</p>
+          </article>
+          <article class="bg-white border border-gray-100 p-7 rounded-2xl shadow-sm">
+            <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-5"><i class="fa-solid fa-list-check"></i></div>
+            <h3 class="text-xl font-bold text-brandDark mb-3">Model Data and Parameter Checks</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Define checks for required parameters, naming patterns, missing values, or other agreed model-information rules.</p>
+          </article>
+          <article class="bg-white border border-gray-100 p-7 rounded-2xl shadow-sm">
+            <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-5"><i class="fa-solid fa-file-lines"></i></div>
+            <h3 class="text-xl font-bold text-brandDark mb-3">Schedules and Data Extraction</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Organize available model information into structured outputs or reports when the project data and permitted interfaces support the requirement.</p>
+          </article>
+          <article class="bg-white border border-gray-100 p-7 rounded-2xl shadow-sm">
+            <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-5"><i class="fa-solid fa-shield-halved"></i></div>
+            <h3 class="text-xl font-bold text-brandDark mb-3">Model Quality Checks</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Create repeatable checks around agreed model standards and produce a list of items for the design team to review.</p>
+          </article>
+          <article class="bg-white border border-gray-100 p-7 rounded-2xl shadow-sm">
+            <div class="w-14 h-14 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-2xl mb-5"><i class="fa-solid fa-code"></i></div>
+            <h3 class="text-xl font-bold text-brandDark mb-3">Custom Workflow Tools</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Explore a script or tool around a defined bottleneck, then test it on suitable sample data before adopting it for production work.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white border-y border-gray-100">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center mb-14">
+          <h2 class="text-3xl lg:text-4xl font-bold text-brandDark">A careful automation process</h2>
+          <p class="text-gray-600 mt-4">The aim is to make a repeatable task easier to run and review—not to automate without understanding the model or its risks.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-2xl bg-brandLight"><span class="text-brandBlue font-bold text-sm">STEP 01</span><h3 class="font-bold text-brandDark text-lg mt-3 mb-2">Define the task</h3><p class="text-gray-600 text-sm leading-relaxed">Describe the repeated operation, model context, rules, and desired output.</p></div>
+          <div class="p-6 rounded-2xl bg-brandLight"><span class="text-brandBlue font-bold text-sm">STEP 02</span><h3 class="font-bold text-brandDark text-lg mt-3 mb-2">Review the setup</h3><p class="text-gray-600 text-sm leading-relaxed">Confirm the Revit version, model standards, parameters, and tool constraints.</p></div>
+          <div class="p-6 rounded-2xl bg-brandLight"><span class="text-brandBlue font-bold text-sm">STEP 03</span><h3 class="font-bold text-brandDark text-lg mt-3 mb-2">Prototype and test</h3><p class="text-gray-600 text-sm leading-relaxed">Test on a suitable copy or sample and review the output against expected results.</p></div>
+          <div class="p-6 rounded-2xl bg-brandLight"><span class="text-brandBlue font-bold text-sm">STEP 04</span><h3 class="font-bold text-brandDark text-lg mt-3 mb-2">Document and hand over</h3><p class="text-gray-600 text-sm leading-relaxed">Explain how to run the workflow, its assumptions, limits, and review points.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20">
+      <div class="max-w-4xl mx-auto px-6 lg:px-8">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brandDark text-center mb-10">Revit and BIM automation FAQs</h2>
+        <div class="space-y-4">
+          <details class="bg-white border border-gray-200 rounded-xl p-5"><summary class="font-semibold text-brandDark cursor-pointer">What kinds of Revit tasks may be suitable for automation?</summary><p class="text-gray-600 text-sm leading-relaxed mt-3">Repeated tasks with clear rules—such as selected tagging steps, parameter checks, data extraction, or model-quality checks—may be candidates. Suitability depends on the model, Revit version, workflow, and required safeguards.</p></details>
+          <details class="bg-white border border-gray-200 rounded-xl p-5"><summary class="font-semibold text-brandDark cursor-pointer">Do all BIM tasks work with Dynamo?</summary><p class="text-gray-600 text-sm leading-relaxed mt-3">No. Dynamo can help with many defined operations, but some needs may require another supported approach or may not be appropriate to automate. The use case should be reviewed before choosing the method.</p></details>
+          <details class="bg-white border border-gray-200 rounded-xl p-5"><summary class="font-semibold text-brandDark cursor-pointer">How do you reduce the risk of unintended model changes?</summary><p class="text-gray-600 text-sm leading-relaxed mt-3">A suitable workflow should be tested on a copy or sample where possible, compared with expected results, and reviewed by the responsible project team before production use.</p></details>
+          <details class="bg-white border border-gray-200 rounded-xl p-5"><summary class="font-semibold text-brandDark cursor-pointer">What information should I share about a BIM automation request?</summary><p class="text-gray-600 text-sm leading-relaxed mt-3">Share the Revit version, a short description of the repeated task, the desired result, relevant model standards or parameters, and a safe screenshot or sample if available. Avoid sending confidential project data unless you are authorized to share it.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-brandDark text-white py-16">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <h2 class="text-3xl lg:text-4xl font-bold">Have a repeated Revit or BIM task?</h2>
+        <p class="text-gray-300 mt-4 leading-relaxed">Describe the workflow, project setup, and result you need. We can discuss whether automation is practical and what a safe first test could look like.</p>
+        <a href="index.html#contact" class="inline-block mt-7 bg-brandBlue text-white font-medium px-6 py-3.5 rounded-lg hover:bg-blue-500 transition-colors">Discuss Your BIM Workflow <i class="fa-solid fa-arrow-right ml-2"></i></a>
+      </div>
+    </section>
+
+    <section class="py-8 bg-white border-t border-gray-100">
+      <div class="max-w-4xl mx-auto px-6 text-center text-sm text-gray-600 space-y-2">
+        <p>Need business workflow automation instead? <a href="business-process-automation.html" class="text-brandBlue font-semibold hover:underline">Explore Business Process Automation</a>.</p>
+        <p>Need a website or web app? <a href="web-development.html" class="text-brandBlue font-semibold hover:underline">Explore Website & Web App Development</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-white border-t border-gray-100 py-8">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <p>&copy; 2026 Trevion Technologies. All rights reserved.</p>
+      <div class="flex flex-wrap gap-5"><a href="index.html" class="hover:text-brandBlue">Home</a><a href="index.html#services" class="hover:text-brandBlue">Services</a><a href="index.html#contact" class="hover:text-brandBlue">Contact</a><a href="web-development.html" class="hover:text-brandBlue">Website Development</a><a href="business-process-automation.html" class="hover:text-brandBlue">Business Automation</a></div>
+    </div>
+  </footer>
+</body>
+</html>
