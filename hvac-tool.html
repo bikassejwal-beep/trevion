@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HVAC Tool | Duct Sizer Suite | Trevion Technologies</title>
+<meta name="description" content="Use Trevion Technologies' HVAC Duct Sizer Suite for preliminary duct sizing, pressure-drop estimates, filter and plenum sizing, and louvre and grille calculations.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://trevion-technologies.onrender.com/hvac-tool.html">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one working column. Header with two tabs (Duct Sizer, Pressure Drop), settings strip on top, results table below. */
+:root{
+  --bg:#edf1f3;
+  --panel:#f9fbfc;
+  --ink:#14232a;
+  --muted:#5a6d76;
+  --line:#cfd9de;
+  --accent:#0a6f82;
+  --accent-ink:#ffffff;
+  --warn:#a65a00;
+  --warn-bg:#fdf0dc;
+  --ok:#1b7a43;
+  --bad:#b3261e;
+  --bad-bg:#fbe4e1;
+  --field:#ffffff;
+  --font-display:"Barlow Semi Condensed","Arial Narrow",sans-serif;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-data:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d181d;--panel:#14232a;--ink:#e4eef2;--muted:#8ba2ad;--line:#27404b;
+  --accent:#4fc1d6;--accent-ink:#06222a;--warn:#f0b35a;--warn-bg:#3a2a10;--ok:#5fd18b;--bad:#ff8f84;--bad-bg:#40191a;--field:#0f1d23;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d181d;--panel:#14232a;--ink:#e4eef2;--muted:#8ba2ad;--line:#27404b;
+  --accent:#4fc1d6;--accent-ink:#06222a;--warn:#f0b35a;--warn-bg:#3a2a10;--ok:#5fd18b;--bad:#ff8f84;--bad-bg:#40191a;--field:#0f1d23;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;
+  padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--font-display);font-weight:700;font-size:30px;line-height:1.1;margin:0;letter-spacing:.2px;text-wrap:balance}
+h2{font-family:var(--font-display);font-weight:600;font-size:19px;margin:0 0 10px;text-wrap:balance}
+p{margin:0}
+.sub{color:var(--muted);font-size:14px;margin-top:4px}
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tab{font-family:var(--font-display);font-weight:600;font-size:18px;background:none;border:0;color:var(--muted);padding:10px 16px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tab:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);min-width:0}
+input,select,textarea{font-family:var(--font-data);font-size:15px;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%;min-width:0}
+textarea{min-height:130px;resize:vertical}
+.hint{font-size:12.5px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:14px}
+th{font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:right;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:right;font-family:var(--font-data);font-variant-numeric:tabular-nums;white-space:nowrap}
+td input{padding:5px 8px;font-size:14px}
+tr.sel td{background:color-mix(in srgb,var(--accent) 9%,transparent)}
+tbody tr{cursor:pointer}
+tfoot td{font-weight:500;border-bottom:0}
+.btn{font-family:var(--font-display);font-weight:600;font-size:16px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:4px;padding:8px 16px;cursor:pointer}
+.btn.ghost{background:none;color:var(--accent)}
+.btn.x{padding:3px 9px;font-size:14px;border-color:var(--line);color:var(--muted);background:none}
+.bar{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.flag{display:inline-block;font-family:var(--font-body);font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--warn-bg);color:var(--warn)}
+.flag.ok{background:transparent;color:var(--ok);border:1px solid var(--ok)}
+.seg{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);border-radius:5px;overflow:hidden;align-self:flex-start}
+.seg button{font-family:var(--font-display);font-weight:600;font-size:16px;background:var(--field);color:var(--muted);border:0;border-right:1px solid var(--line);padding:8px 16px;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:16px}
+.stat{border-top:3px solid var(--accent);padding-top:8px}
+.stat .k{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-family:var(--font-data);font-size:26px;font-weight:500;font-variant-numeric:tabular-nums}
+.stat .u{font-size:13px;color:var(--muted)}
+.note{font-size:13px;color:var(--muted);margin-top:12px;max-width:70ch}
+.sample{font-size:12px;font-weight:600;color:var(--warn)}
+.method{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:14px}
+label.radio{flex-direction:row;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer}
+input[type=radio]{width:18px;height:18px;padding:0;accent-color:var(--accent)}
+.tag{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.verdict{border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.verdict .vh{font-family:var(--font-display);font-weight:700;font-size:24px;line-height:1.15}
+.verdict .vs{font-size:13px;color:var(--muted)}
+.verdict ul{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.verdict li b{font-weight:600;margin-right:6px}
+.verdict.ok{background:color-mix(in srgb,var(--ok) 11%,var(--panel));border-color:var(--ok)}
+.verdict.ok .vh{color:var(--ok)}
+.verdict.warn{background:var(--warn-bg);border-color:var(--warn)}
+.verdict.warn .vh{color:var(--warn)}
+.verdict.bad{background:var(--bad-bg);border-color:var(--bad)}
+.verdict.bad .vh{color:var(--bad)}
+.c-ok{color:var(--ok)}.c-warn{color:var(--warn)}.c-bad{color:var(--bad)}
+[hidden]{display:none!important}
+</style>
+
+</head><body>
+<div class="wrap">
+  <header>
+    <h1>Duct Sizer Suite</h1>
+    <p class="sub">Equal-friction duct sizing and damper or filter pressure drop in one place.</p>
+    <p class="sub" style="margin-top:10px"><a href="revit-bim-automation.html" style="color:var(--accent);font-weight:600;text-decoration:underline">← Back to Revit, Dynamo &amp; BIM Automation</a></p>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t-duct" aria-selected="true" data-tab="duct">Duct Sizer</button>
+    <button class="tab" role="tab" id="t-press" aria-selected="false" data-tab="press">Damper Pressure</button>
+    <button class="tab" role="tab" id="t-filter" aria-selected="false" data-tab="filter">Filter &amp; Plenum</button>
+    <button class="tab" role="tab" id="t-louvre" aria-selected="false" data-tab="louvre">Louvre &amp; Grille</button>
+  </div>
+
+  <!-- ============ DUCT SIZER ============ -->
+  <section id="p-duct" role="tabpanel" aria-labelledby="t-duct" class="wrap" style="gap:16px">
+    <div class="panel">
+      <h2>Design basis</h2>
+      <div class="method" role="radiogroup" aria-label="Sizing method">
+        <label class="radio" for="mFric"><input type="radio" name="method" id="mFric" value="friction" checked> Equal friction method</label>
+        <label class="radio" for="mVel"><input type="radio" name="method" id="mVel" value="velocity"> Velocity method</label>
+      </div>
+      <div class="grid">
+        <label for="flowUnit">Flow unit
+          <select id="flowUnit"><option value="ls">L/s</option><option value="cfm">CFM</option><option value="m3h">m³/h</option></select></label>
+        <label for="frUnit">Friction unit
+          <select id="frUnit"><option value="pam">Pa/m</option><option value="inwg">in.wg / 100 ft</option></select></label>
+        <label for="frRate">Friction rate
+          <input id="frRate" type="number" step="any" value="1.0">
+          <span class="hint" id="frHint">Sizes the duct</span></label>
+        <label for="vmax">Max velocity (m/s)
+          <input id="vmax" type="number" step="any" value="8">
+          <span class="hint" id="vHint">Noise check only</span></label>
+        <label for="ar">Max aspect ratio
+          <input id="ar" type="number" step="0.1" min="1" value="2"></label>
+        <label for="eps">Roughness (mm)
+          <input id="eps" type="number" step="any" value="0.09">
+          <span class="hint">Galvanized steel 0.09</span></label>
+      </div>
+      <p class="note">Equal friction method: the duct is sized so friction stays at or below the friction rate, and velocity is only checked. Velocity method: the duct is sized so velocity stays at or below the max velocity, and friction is only reported. Round sizes go up to the next standard size, rectangular sizes to the next 50 mm.</p>
+    </div>
+
+    <div>
+      <div class="tblwrap">
+        <table>
+          <thead><tr>
+            <th>Segment</th><th id="thFlow">Flow (L/s)</th><th>Length (m)</th>
+            <th>Round Ø mm</th><th>Vel m/s</th><th>Fric Pa/m</th><th>Loss Pa</th>
+            <th>Rect mm</th><th>Rect vel</th><th>Check</th><th></th>
+          </tr></thead>
+          <tbody id="rows"></tbody>
+          <tfoot><tr><td colspan="6">Total straight-duct loss (rows with length)</td><td id="totLoss">0</td><td colspan="4"></td></tr></tfoot>
+        </table>
+      </div>
+      <div class="bar">
+        <button class="btn" id="addRow" type="button">Add segment</button>
+        <span class="sample">Rows shown are example segments. Edit or replace them.</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Rectangular options for <span id="selName">Main</span></h2>
+      <div class="tblwrap" style="border:0">
+        <table style="min-width:620px">
+          <thead><tr><th>Ratio</th><th>Width × Height mm</th><th>Eq. Ø mm</th><th>Vel m/s</th><th>Fric Pa/m</th></tr></thead>
+          <tbody id="opts"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Size and check <span id="fitName">Main</span></h2>
+      <div class="bar" style="margin-top:0;margin-bottom:14px;gap:14px">
+        <div class="seg" id="shapeSeg" role="group" aria-label="Duct shape">
+          <button type="button" data-shape="R" aria-pressed="true">Rectangular</button>
+          <button type="button" data-shape="C" aria-pressed="false">Round</button>
+        </div>
+        <div class="seg" id="sideSeg" role="group" aria-label="Side you know">
+          <button type="button" data-side="W" aria-pressed="false">I know the width</button>
+          <button type="button" data-side="H" aria-pressed="true">I know the height</button>
+        </div>
+      </div>
+      <div class="grid">
+        <label for="fxW" id="lblW"><span>Width (mm) <b class="tag" id="tagW"></b></span><input id="fxW" type="number" step="any" value=""></label>
+        <label for="fxH" id="lblH"><span>Height (mm) <b class="tag" id="tagH"></b></span><input id="fxH" type="number" step="any" value="300"></label>
+        <label for="fxD" id="lblD" hidden><span>Diameter (mm) <b class="tag" id="tagD"></b></span><input id="fxD" type="number" step="any" value=""></label>
+      </div>
+      <div class="bar"><button class="btn ghost" id="fxReset" type="button" hidden>Reset to auto size</button></div>
+      <div id="fxVerdict"></div>
+      <div class="res" id="fxRes"></div>
+      <p class="note">Type the side your space allows. The other side is sized for you with the method chosen above. Type in the other side yourself to test a size you want, and the status tells you if it passes and why. Flow and length come from the highlighted row of the table. Height 300 mm is an example.</p>
+    </div>
+  </section>
+
+  <!-- ============ PRESSURE ============ -->
+  <section id="p-press" role="tabpanel" aria-labelledby="t-press" class="wrap" style="gap:16px" hidden>
+    <div class="seg" id="modeSeg" role="group" aria-label="Calculation method">
+      <button type="button" data-mode="k" aria-pressed="true">Damper (K factor)</button>
+      <button type="button" data-mode="curve" aria-pressed="false">Datasheet curve</button>
+      <button type="button" data-mode="ifd" aria-pressed="false">Fire Damper Pressure</button>
+    </div>
+
+    <div class="panel" id="m-k">
+      <h2>Damper by loss coefficient</h2>
+      <div class="seg" id="kShapeSeg" role="group" aria-label="Damper shape" style="margin-bottom:14px">
+        <button type="button" data-kshape="C" aria-pressed="true">Round</button>
+        <button type="button" data-kshape="R" aria-pressed="false">Rectangular</button>
+      </div>
+      <div class="grid">
+        <label for="kDia" id="kDiaL">Diameter (mm)<select id="kDia">
+          <option>100</option><option>125</option><option>150</option><option selected>200</option><option>250</option><option>300</option><option>350</option><option>400</option><option>500</option><option>600</option></select></label>
+        <label for="kW" id="kWL" hidden>Width (mm)<input id="kW" type="number" step="any" value="300"></label>
+        <label for="kH" id="kHL" hidden>Height (mm)<input id="kH" type="number" step="any" value="200"></label>
+        <label for="kFlow">Airflow<input id="kFlow" type="number" step="any" value="60"></label>
+        <label for="kFlowU">Flow unit<select id="kFlowU"><option value="ls">L/s</option><option value="cfm">CFM</option><option value="m3h">m³/h</option></select></label>
+        <label for="kK">K factor
+          <input id="kK" type="number" step="any" value="1.5">
+          <span class="hint">Example value. Take K from the damper datasheet.</span></label>
+      </div>
+      <div class="res" id="kRes"></div>
+      <p class="note">ΔP = K × ½ρv², with v taken on the damper face area (πD²/4 for round, width × height for rectangular) and ρ = 1.204 kg/m³. Rectangular size 300 × 200 mm is an example.</p>
+    </div>
+
+    <div class="panel" id="m-curve" hidden>
+      <h2>Pressure from a datasheet table</h2>
+      <div class="grid">
+        <label for="cPts" style="grid-column:1/-1">Datasheet points (airflow L/s, ΔP Pa, one pair per line)
+          <textarea id="cPts" spellcheck="false">50, 12
+100, 40
+150, 85
+200, 150
+250, 235
+300, 340</textarea></label>
+        <label for="cQ">Airflow<input id="cQ" type="number" step="any" value="180"></label>
+        <label for="cQU">Flow unit<select id="cQU"><option value="ls">L/s</option><option value="cfm">CFM</option><option value="m3h">m³/h</option></select></label>
+      </div>
+      <div class="res" id="cRes"></div>
+      <p class="sample" style="margin-top:12px">Points above are an example curve. Type in the values from your own datasheet, for example one diameter of a damper selector table.</p>
+      <p class="note">Values between points are linearly interpolated. Outside the table the result is extrapolated with a ΔP ∝ Q² curve and flagged.</p>
+    </div>
+
+    <div class="panel" id="m-ifd" hidden>
+      <h2>IFD44-LL, rectangular</h2>
+      <div class="grid">
+        <label for="i44W">Width (mm)<input id="i44W" type="number" step="any" value="300"></label>
+        <label for="i44H">Height (mm)<input id="i44H" type="number" step="any" value="300"></label>
+        <label for="i44Q">Airflow (L/s)<input id="i44Q" type="number" step="any" value="200"></label>
+      </div>
+      <div class="res" id="i44Res"></div>
+    </div>
+
+    <div class="panel" id="m-ifdo" hidden>
+      <h2>IFDO-LL, round</h2>
+      <div class="grid">
+        <label for="ioD">Diameter (mm)<select id="ioD"><option>100</option><option>125</option><option>150</option><option>200</option><option>250</option><option>300</option><option>350</option></select></label>
+        <label for="ioQ">Airflow (L/s)<input id="ioQ" type="number" step="any" value="100"></label>
+      </div>
+      <div class="res" id="ioRes"></div>
+      <p class="note">These two follow the formulas on the Kilargo calculator page (kilargo.com.au/calculator). The default inputs give the same answers as that page: IFD44-LL 300 × 300 mm at 200 L/s is 13 Pa, and IFDO-LL 100 mm at 100 L/s is 305 Pa. Check other sizes on the Kilargo page before you rely on them, and use the Kilargo product data for submittals.</p>
+    </div>
+  </section>
+
+  <!-- ============ FILTER & PLENUM ============ -->
+  <section id="p-filter" role="tabpanel" aria-labelledby="t-filter" class="wrap" style="gap:16px" hidden>
+    <div class="panel">
+      <h2>Filter size</h2>
+      <div class="grid">
+        <label for="flQ">Airflow (L/s)<input id="flQ" type="number" step="any" value="1000"></label>
+        <label for="flV">Max velocity (m/s)<input id="flV" type="number" step="any" value="1.8"><span class="hint">Preferred 1.8 m/s</span></label>
+        <label for="flW1">Filter width W1 (mm)<input id="flW1" type="number" step="any" value="492"></label>
+        <label for="flW2">W2, optional (mm)<input id="flW2" type="number" step="any" value="492"></label>
+        <label for="flW3">W3, optional (mm)<input id="flW3" type="number" step="any" value="492"></label>
+        <label for="flH">Filter height (mm)<input id="flH" type="number" step="any" value="390"></label>
+      </div>
+      <div class="res" id="flRes"></div>
+      <p class="note">Velocity = airflow ÷ ((W1 + W2 + W3) × height). Enter 0 for a width you do not use.</p>
+    </div>
+
+    <div class="panel">
+      <h2>Plenum box size</h2>
+      <div class="grid">
+        <label for="plEW">Equipment opening width (mm)<input id="plEW" type="number" step="any" value="1480"></label>
+        <label for="plEH">Equipment opening height (mm)<input id="plEH" type="number" step="any" value="250"></label>
+        <label for="plRW">R/A connection width (mm)<input id="plRW" type="number" step="any" value="0"></label>
+        <label for="plRH">R/A connection height (mm)<input id="plRH" type="number" step="any" value="255"></label>
+        <label for="plOW">O/A connection width (mm)<input id="plOW" type="number" step="any" value="400"></label>
+        <label for="plOH">O/A connection height (mm)<input id="plOH" type="number" step="any" value="300"></label>
+        <label for="plAP">Access panel width (mm)<input id="plAP" type="number" step="any" value="200"></label>
+        <label for="plIns">Plenum insulation (mm)<input id="plIns" type="number" step="any" value="50"></label>
+        <label for="plD">Depth override (mm)<input id="plD" type="number" step="any" value="0"><span class="hint">0 uses the rule below</span></label>
+      </div>
+      <div class="res" id="plRes"></div>
+      <p class="note">Width = larger of the equipment opening and the filter bank, plus insulation on both sides. Height = larger of the filter height and the equipment opening height, plus insulation on both sides. Depth = equipment opening height + access panel width + insulation on both sides. Connections must fit inside the inner width and height.</p>
+    </div>
+  </section>
+
+  <!-- ============ LOUVRE & GRILLE ============ -->
+  <section id="p-louvre" role="tabpanel" aria-labelledby="t-louvre" class="wrap" style="gap:16px" hidden>
+    <div class="panel">
+      <h2>Louvre size</h2>
+      <div class="grid">
+        <label for="lvQ">Airflow (L/s)<input id="lvQ" type="number" step="any" value="70"></label>
+        <label for="lvV">Velocity (m/s)<input id="lvV" type="number" step="any" value="2.5"></label>
+        <label for="lvP">Free area (%)<input id="lvP" type="number" step="any" value="50"></label>
+        <label for="lvH">Height (mm)<input id="lvH" type="number" step="any" value="450"></label>
+      </div>
+      <div class="res" id="lvRes"></div>
+    </div>
+    <div class="panel">
+      <h2>Grille size</h2>
+      <div class="grid">
+        <label for="grQ">Airflow (L/s)<input id="grQ" type="number" step="any" value="56"></label>
+        <label for="grV">Velocity (m/s)<input id="grV" type="number" step="any" value="2.5"></label>
+        <label for="grP">Free area (%)<input id="grP" type="number" step="any" value="85"></label>
+        <label for="grH">Height (mm)<input id="grH" type="number" step="any" value="150"></label>
+      </div>
+      <div class="res" id="grRes"></div>
+      <p class="note">Free area = airflow ÷ velocity. Total area = free area ÷ free-area fraction. Width = total area ÷ height.</p>
+    </div>
+    <div class="panel">
+      <h2>Refrigerant weight</h2>
+      <div class="grid">
+        <label for="rfA">A, room area (m²)<input id="rfA" type="number" step="any" value="10"></label>
+        <label for="rfH">H, height (m)<input id="rfH" type="number" step="any" value="3"></label>
+        <label for="rfF">Factor (kg/m³)<input id="rfF" type="number" step="any" value="0.44"></label>
+      </div>
+      <div class="res" id="rfRes"></div>
+      <p class="note">Weight = A × H × factor, as in your Refrigerent sheet.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+// CALC-START
+const RHO = 1.204, NU = 1.516e-5;
+const ROUND_STD = [100,125,150,160,180,200,224,250,280,315,355,400,450,500,560,630,710,800,900,1000,1120,1250,1400,1600,1800,2000];
+function toM3s(v, u){ return u === 'ls' ? v/1000 : u === 'cfm' ? v*0.00047194745 : v/3600; }
+function toPaM(v, u){ return u === 'pam' ? v : v*8.17240; }
+function fric(Q, D, eps){
+  const A = Math.PI*D*D/4, v = Q/A, Re = Math.max(v*D/NU, 1);
+  const rel = eps/(3.7*D);
+  let f = 0.25/Math.pow(Math.log10(rel + 5.74/Math.pow(Re,0.9)), 2);
+  for(let i=0;i<8;i++){ const r = -2*Math.log10(rel + 2.51/(Re*Math.sqrt(f))); f = 1/(r*r); }
+  return { v, Re, f, dpm: f/D*RHO*v*v/2 };
+}
+function solveD(Q, target, eps){
+  let lo = 0.03, hi = 4;
+  for(let i=0;i<70;i++){ const m=(lo+hi)/2; if(fric(Q,m,eps).dpm > target) lo=m; else hi=m; }
+  return (lo+hi)/2;
+}
+function meets(method, dpm, v, target, vmax){
+  return method === 'velocity' ? v <= vmax*1.0001 : dpm <= target*1.0001;
+}
+function sizeRound(Q, method, target, vmax, eps){
+  const dReq = method === 'velocity' ? Math.sqrt(4*Q/(Math.PI*vmax)) : solveD(Q, target, eps);
+  let idx = ROUND_STD.findIndex(sz => sz/1000 >= dReq - 1e-9);
+  if(idx < 0) idx = ROUND_STD.length - 1;
+  const ok = i => { const D = ROUND_STD[i]/1000, r = fric(Q, D, eps); return meets(method, r.dpm, r.v, target, vmax); };
+  while(idx < ROUND_STD.length-1 && !ok(idx)) idx++;
+  const D = ROUND_STD[idx]/1000, r = fric(Q, D, eps);
+  return { dReq, D, v: r.v, dpm: r.dpm };
+}
+function deq(a, b){ return 1.30*Math.pow(a*b,0.625)/Math.pow(a+b,0.25); }
+function rectForRatio(Q, ar, method, target, vmax, eps){
+  let best = null;
+  for(let b = 100; b <= 5000; b += 50){
+    const a = Math.max(b, Math.floor(ar*b/50)*50);
+    const de = deq(a, b), r = fric(Q, de/1000, eps), v = Q/(a*b/1e6);
+    best = { a, b, de, v, dpm: r.dpm };
+    if(meets(method, r.dpm, v, target, vmax)) break;
+  }
+  return best;
+}
+function interp(pts, x){
+  const p = pts.slice().sort((m,n)=>m[0]-n[0]);
+  if(p.length < 2) return { y: NaN, inRange: false };
+  if(x < p[0][0] || x > p[p.length-1][0]){
+    const e = x < p[0][0] ? p[0] : p[p.length-1];
+    return { y: e[1]*Math.pow(x/e[0],2), inRange: false };
+  }
+  for(let i=0;i<p.length-1;i++){
+    if(x >= p[i][0] && x <= p[i+1][0]){
+      const t = (x-p[i][0])/(p[i+1][0]-p[i][0] || 1);
+      return { y: p[i][1] + t*(p[i+1][1]-p[i][1]), inRange: true };
+    }
+  }
+  return { y: NaN, inRange: false };
+}
+function fitSolve(Q, fixed, method, target, vmax, eps){
+  for(let o = 100; o <= 5000; o += 50){
+    const r = fric(Q, deq(fixed, o)/1000, eps), v = Q/(fixed*o/1e6);
+    if(meets(method, r.dpm, v, target, vmax)) return { other: o };
+  }
+  return null;
+}
+const IFD44_POLY = [[0,-0.0127,2.1465,1.0259],[0.091,-0.0223,2.0114,0.3146],[0.161,-0.0013,1.5479,0.4457],[0.251,-0.0008,1.2113,0.1742]];
+function ifd44(w, h, q){
+  const area = w/1000*h/1000;
+  if(!(area > 0)) return 0;
+  const t = (q/1000)/area;
+  let c = IFD44_POLY[0];
+  IFD44_POLY.forEach(p => { if(p[0] < area) c = p; });
+  return Math.ceil(c[1]*t*t*t + c[2]*t*t + c[3]*t);
+}
+const IFDO_K = { 100:[0.1472,1.6583], 125:[0.0022,2.2812], 150:[0.0001,2.643], 200:[0.0009,2.0329], 250:[0.0005,2.0418], 300:[0.0003,2.0195], 350:[0.0002,2.0169] };
+function ifdo(d, q){
+  const k = IFDO_K[d];
+  return k ? Math.floor(k[0]*Math.pow(q, k[1])) : NaN;
+}
+// CALC-END
+
+const $ = id => document.getElementById(id);
+const fmt = (x, d=1) => (isFinite(x) ? x.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}) : '–');
+const inwg = pa => pa/249.089;
+const unitLabel = {ls:'L/s', cfm:'CFM', m3h:'m³/h'};
+
+/* ---------- tabs ---------- */
+const TABS = { duct:'duct', press:'pressure', filter:'filter', louvre:'louvre' };
+function showTab(name){
+  if(!TABS[name]) name = 'duct';
+  Object.keys(TABS).forEach(k => {
+    $('p-'+k).hidden = k !== name;
+    $('t-'+k).setAttribute('aria-selected', k === name);
+  });
+  try{ history.replaceState(null,'','#'+TABS[name]); }catch(e){}
+}
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+(function(){ const h = location.hash.slice(1); const k = Object.keys(TABS).find(x => TABS[x] === h); if(k) showTab(k); })();
+
+/* ---------- duct sizer ---------- */
+let rows = [
+  { name:'Main trunk', flow:1500, len:12 },
+  { name:'Branch A', flow:600, len:8 },
+  { name:'Branch B', flow:300, len:5 }
+];
+let sel = 0;
+const conv = { ls:1, cfm:2.11888, m3h:3.6 }; // per L/s
+let prevUnit = 'ls';
+
+function settings(){
+  const fu = $('flowUnit').value;
+  return {
+    fu,
+    method: $('mVel').checked ? 'velocity' : 'friction',
+    target: toPaM(parseFloat($('frRate').value)||0.01, $('frUnit').value),
+    vmax: parseFloat($('vmax').value)||8,
+    ar: Math.max(1, parseFloat($('ar').value)||2),
+    eps: (parseFloat($('eps').value)||0.09)/1000
+  };
+}
+function buildRows(){
+  const tb = $('rows'); tb.innerHTML = '';
+  rows.forEach((r,i) => {
+    const tr = document.createElement('tr');
+    tr.dataset.i = i;
+    tr.innerHTML = `
+      <td><input type="text" id="rn${i}" value="${r.name.replace(/"/g,'&quot;')}" aria-label="Segment name" style="min-width:120px;font-family:var(--font-body)"></td>
+      <td><input type="number" step="any" id="rf${i}" value="${r.flow}" aria-label="Flow" style="width:100px;text-align:right"></td>
+      <td><input type="number" step="any" id="rl${i}" value="${r.len}" aria-label="Length in metres" style="width:80px;text-align:right"></td>
+      <td id="o${i}-d"></td><td id="o${i}-v"></td><td id="o${i}-f"></td><td id="o${i}-l"></td>
+      <td id="o${i}-r"></td><td id="o${i}-rv"></td><td id="o${i}-g"></td>
+      <td><button class="btn x" type="button" data-del="${i}" aria-label="Remove segment">×</button></td>`;
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll('tr').forEach(tr => {
+    const i = +tr.dataset.i;
+    tr.addEventListener('click', e => { if(e.target.closest('button')) return; sel = i; calcDuct(); });
+    tr.querySelector(`#rn${i}`).addEventListener('input', e => { rows[i].name = e.target.value; calcDuct(); });
+    tr.querySelector(`#rf${i}`).addEventListener('input', e => { rows[i].flow = parseFloat(e.target.value)||0; calcDuct(); });
+    tr.querySelector(`#rl${i}`).addEventListener('input', e => { rows[i].len = parseFloat(e.target.value)||0; calcDuct(); });
+    tr.querySelector('[data-del]').addEventListener('click', () => {
+      if(rows.length === 1) return;
+      rows.splice(i,1); sel = Math.min(sel, rows.length-1); buildRows(); calcDuct();
+    });
+  });
+}
+function calcDuct(){
+  const s = settings();
+  $('thFlow').textContent = `Flow (${unitLabel[s.fu]})`;
+  let total = 0;
+  rows.forEach((r,i) => {
+    const Q = toM3s(r.flow, s.fu);
+    const tr = $('rows').children[i];
+    tr.classList.toggle('sel', i === sel);
+    if(Q <= 0){ ['d','v','f','l','r','rv','g'].forEach(k => $(`o${i}-${k}`).textContent = '–'); return; }
+    const rd = sizeRound(Q, s.method, s.target, s.vmax, s.eps);
+    const rc = rectForRatio(Q, s.ar, s.method, s.target, s.vmax, s.eps);
+    const loss = rd.dpm * r.len; total += loss;
+    $(`o${i}-d`).textContent = Math.round(rd.D*1000);
+    $(`o${i}-v`).textContent = fmt(rd.v,1);
+    $(`o${i}-f`).textContent = fmt(rd.dpm,2);
+    $(`o${i}-l`).textContent = fmt(loss,1);
+    $(`o${i}-r`).textContent = `${rc.a} × ${rc.b}`;
+    $(`o${i}-rv`).textContent = fmt(rc.v,1);
+    const hiVel = s.method === 'friction' && Math.max(rd.v, rc.v) > s.vmax*1.0001;
+    $(`o${i}-g`).innerHTML = hiVel ? '<span class="flag">Vel high</span>' : '<span class="flag ok">OK</span>';
+  });
+  $('totLoss').textContent = fmt(total,1) + ' Pa';
+  // options for selected row
+  const r = rows[sel]; $('selName').textContent = r.name || 'segment';
+  const Q = toM3s(r.flow, s.fu), body = $('opts'); body.innerHTML = '';
+  if(Q > 0){
+    [1,1.5,2,3,4].forEach(ar => {
+      const rc = rectForRatio(Q, ar, s.method, s.target, s.vmax, s.eps);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${ar}:1</td><td>${rc.a} × ${rc.b}</td><td>${Math.round(rc.de)}</td><td>${fmt(rc.v,1)}</td><td>${fmt(rc.dpm,2)}</td>`;
+      tr.style.cursor = 'default';
+      body.appendChild(tr);
+    });
+  }
+  calcFit();
+}
+$('addRow').addEventListener('click', () => { rows.push({ name:'Segment '+(rows.length+1), flow:200, len:5 }); sel = rows.length-1; buildRows(); calcDuct(); });
+function updateMethodUI(){
+  const vel = $('mVel').checked;
+  $('frRate').disabled = vel; $('frUnit').disabled = vel;
+  $('frHint').textContent = vel ? 'Not used in the velocity method' : 'Sizes the duct';
+  $('vHint').textContent = vel ? 'Sizes the duct' : 'Noise check only';
+}
+['mFric','mVel'].forEach(id => $(id).addEventListener('change', () => { updateMethodUI(); calcDuct(); }));
+['frRate','vmax','ar','eps','frUnit'].forEach(id => $(id).addEventListener('input', calcDuct));
+$('frUnit').addEventListener('change', () => {
+  const el = $('frRate');
+  el.value = $('frUnit').value === 'inwg' ? '0.12' : '1.0';
+  calcDuct();
+});
+$('flowUnit').addEventListener('change', () => {
+  const to = $('flowUnit').value;
+  rows.forEach(r => { r.flow = Math.round(r.flow/conv[prevUnit]*conv[to]*10)/10; });
+  prevUnit = to; buildRows(); calcDuct();
+});
+
+/* ---------- size and check ---------- */
+const fit = { shape:'R', side:'H', manual:false };
+function setPressed(sel, attr, val){ document.querySelectorAll(sel).forEach(b => b.setAttribute('aria-pressed', b.dataset[attr] === val)); }
+function calcFit(){
+  const s = settings(), r = rows[sel], Q = toM3s(r.flow, s.fu);
+  const rect = fit.shape === 'R';
+  const verdict = $('fxVerdict'), out = $('fxRes');
+  $('fitName').textContent = r.name || 'segment';
+  $('lblW').hidden = $('lblH').hidden = !rect; $('lblD').hidden = rect; $('sideSeg').hidden = !rect;
+  setPressed('#shapeSeg button','shape',fit.shape); setPressed('#sideSeg button','side',fit.side);
+  if(!(Q > 0)){ verdict.innerHTML = '<p class="note">Enter an airflow for this segment in the table.</p>'; out.innerHTML = ''; $('fxReset').hidden = true; return; }
+  const fixedEl = fit.side === 'W' ? $('fxW') : $('fxH'), otherEl = fit.side === 'W' ? $('fxH') : $('fxW');
+  const sideName = fit.side === 'W' ? 'width' : 'height', otherName = fit.side === 'W' ? 'height' : 'width';
+  const fixed = parseFloat(fixedEl.value) || 0;
+  const minSol = rect && fixed > 0 ? fitSolve(Q, fixed, s.method, s.target, s.vmax, s.eps) : null;
+  const minRound = rect ? null : Math.round(sizeRound(Q, s.method, s.target, s.vmax, s.eps).D*1000);
+  if(!fit.manual){
+    if(rect) otherEl.value = minSol ? minSol.other : '';
+    else $('fxD').value = minRound;
+  }
+  $('fxReset').hidden = !fit.manual;
+  const tag = (id, t) => { $(id).textContent = t; };
+  tag('tagW', fit.side === 'W' ? 'you set' : (fit.manual ? 'your size' : 'auto'));
+  tag('tagH', fit.side === 'H' ? 'you set' : (fit.manual ? 'your size' : 'auto'));
+  tag('tagD', fit.manual ? 'your size' : 'auto');
+  const W = parseFloat($('fxW').value) || 0, H = parseFloat($('fxH').value) || 0, D = parseFloat($('fxD').value) || 0;
+  out.innerHTML = '';
+  if(rect && !(W > 0 && H > 0)){
+    verdict.innerHTML = fixed > 0 ? `<p class="note">No size up to 5000 mm passes with this ${sideName}. Raise the ${sideName}.</p>` : `<p class="note">Enter the ${sideName} your space allows.</p>`;
+    return;
+  }
+  if(!rect && !(D > 0)){ verdict.innerHTML = '<p class="note">Enter a diameter.</p>'; return; }
+  const de = rect ? deq(W, H) : D;
+  const area = rect ? W*H/1e6 : Math.PI*D*D/4e6;
+  const f = fric(Q, de/1000, s.eps), v = Q/area, pv = RHO*v*v/2;
+  const head = f.dpm*r.len, ratio = rect ? Math.max(W,H)/Math.min(W,H) : 1;
+  const pass = meets(s.method, f.dpm, v, s.target, s.vmax);
+  const items = [], flow = `${r.flow} ${unitLabel[s.fu]}`;
+  const fixHint = rect
+    ? (minSol ? `Increase the ${otherName} to at least ${minSol.other} mm (with the ${sideName} at ${fixed} mm).` : `No ${otherName} up to 5000 mm passes with a ${sideName} of ${fixed} mm. Raise the ${sideName}.`)
+    : `Use at least ${minRound} mm round.`;
+  let warn = false;
+  if(s.method === 'friction'){
+    if(pass) items.push(['ok','OK',`Friction is ${fmt(f.dpm,2)} Pa/m, within the ${fmt(s.target,2)} Pa/m design rate.`]);
+    else items.push(['bad','Too small',`Friction is ${fmt(f.dpm,2)} Pa/m, above the ${fmt(s.target,2)} Pa/m design rate for ${flow}. ${fixHint}`]);
+    if(v > s.vmax*1.0001){ warn = true; items.push(['warn','Check',`Velocity is ${fmt(v,2)} m/s, above the ${fmt(s.vmax,1)} m/s limit. Expect more air noise.`]); }
+    else items.push(['ok','OK',`Velocity is ${fmt(v,2)} m/s, within the ${fmt(s.vmax,1)} m/s limit.`]);
+    if(pass && f.dpm < 0.5*s.target) items.push(['ok','Note',`Larger than needed. Friction is only ${Math.round(f.dpm/s.target*100)}% of the design rate.` + (rect && minSol && minSol.other < (fit.side==='W'?H:W) ? ` A ${otherName} of ${minSol.other} mm would also pass.` : '')]);
+  } else {
+    if(pass) items.push(['ok','OK',`Velocity is ${fmt(v,2)} m/s, within the ${fmt(s.vmax,1)} m/s design velocity.`]);
+    else items.push(['bad','Too small',`Velocity is ${fmt(v,2)} m/s, above the ${fmt(s.vmax,1)} m/s design velocity for ${flow}. ${fixHint}`]);
+    items.push(['ok','Info',`Friction is ${fmt(f.dpm,2)} Pa/m. It is not a limit in the velocity method.`]);
+    if(pass && v < 0.5*s.vmax) items.push(['ok','Note',`Larger than needed. Velocity is only ${Math.round(v/s.vmax*100)}% of the design velocity.` + (rect && minSol && minSol.other < (fit.side==='W'?H:W) ? ` A ${otherName} of ${minSol.other} mm would also pass.` : '')]);
+  }
+  if(rect){
+    if(ratio > s.ar + 1e-9){ warn = true; items.push(['warn','Check',`Aspect ratio is ${fmt(ratio,2)}:1, above your ${fmt(s.ar,1)}:1 limit. Flat ducts cost more and lose more at fittings.`]); }
+    else items.push(['ok','OK',`Aspect ratio is ${fmt(ratio,2)}:1, within your ${fmt(s.ar,1)}:1 limit.`]);
+  }
+  const lvl = !pass ? 'bad' : (warn ? 'warn' : 'ok');
+  const headline = !pass ? 'Duct size is NOT OK' : (warn ? 'Duct size is OK, with notes' : 'Duct size is OK');
+  const sizeText = (rect ? `${W} × ${H} mm rectangular` : `${D} mm round`) + ` at ${flow}, ${s.method === 'velocity' ? 'velocity method' : 'equal friction method'}`;
+  verdict.innerHTML = `<div class="verdict ${lvl}" role="status"><div class="vh">${headline}</div><div class="vs">${sizeText}</div><ul>${items.map(i => `<li><b class="c-${i[0]}">${i[1]}</b>${i[2]}</li>`).join('')}</ul></div>`;
+  out.innerHTML =
+    stat('Equivalent diameter', fmt(de,0), `mm  (${fmt(de/25.4,1)} in)` + (rect ? '' : ', same as the round duct')) +
+    stat('Flow area', fmt(area,3), `m²  (${fmt(area*1e6,0)} mm²)`) +
+    stat('Fluid velocity', fmt(v,2), `m/s  (${fmt(v/0.00508,0)} fpm)`) +
+    stat('Reynolds number', fmt(f.Re,0), (f.Re > 4000 ? 'turbulent' : 'not fully turbulent') + (rect ? ', equivalent round duct' : '')) +
+    stat('Friction factor', fmt(f.f,4), 'Darcy, from Colebrook') +
+    stat('Velocity pressure', fmt(pv,1), `Pa  (${fmt(inwg(pv),3)} in.wg)`) +
+    stat('Friction rate', fmt(f.dpm,2), `Pa/m  (${fmt(f.dpm/8.1724,3)} in.wg/100ft)`) +
+    stat('Head loss', fmt(head,1), `Pa over ${fmt(r.len,1)} m  (${fmt(inwg(head),3)} in.wg, ${fmt(head/(RHO*9.80665),2)} m of air)`);
+}
+function onFit(which){
+  const el = $(which === 'D' ? 'fxD' : 'fx' + which);
+  const isFixed = fit.shape === 'R' && which === fit.side;
+  fit.manual = !isFixed && el.value.trim() !== '';
+  calcFit();
+}
+['W','H','D'].forEach(k => $(k === 'D' ? 'fxD' : 'fx'+k).addEventListener('input', () => onFit(k)));
+$('fxReset').addEventListener('click', () => { fit.manual = false; calcFit(); });
+document.querySelectorAll('#sideSeg button').forEach(b => b.addEventListener('click', () => { fit.side = b.dataset.side; fit.manual = false; calcFit(); }));
+document.querySelectorAll('#shapeSeg button').forEach(b => b.addEventListener('click', () => { fit.shape = b.dataset.shape; fit.manual = false; calcFit(); }));
+
+/* ---------- pressure ---------- */
+let mode = 'k', kShape = 'C';
+document.querySelectorAll('#kShapeSeg button').forEach(b => b.addEventListener('click', () => {
+  kShape = b.dataset.kshape;
+  document.querySelectorAll('#kShapeSeg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  $('kDiaL').hidden = kShape !== 'C'; $('kWL').hidden = $('kHL').hidden = kShape !== 'R';
+  calcPress();
+}));
+document.querySelectorAll('#modeSeg button').forEach(b => b.addEventListener('click', () => {
+  mode = b.dataset.mode;
+  document.querySelectorAll('#modeSeg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  ['k','curve','ifd'].forEach(m => $('m-'+m).hidden = m !== mode);
+  $('m-ifdo').hidden = mode !== 'ifd';
+  calcPress();
+}));
+function stat(k, v, u){ return `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${u||'&nbsp;'}</div></div>`; }
+function calcIfd(){
+  const w = num('i44W'), h = num('i44H'), q = num('i44Q');
+  const p44 = ifd44(w, h, q), a44 = w/1000*h/1000;
+  $('i44Res').innerHTML = stat('Pressure', fmt(p44,0), `Pa  (${fmt(inwg(p44),3)} in.wg)`) + stat('Face velocity', fmt(a44 > 0 ? q/1000/a44 : NaN,2), 'm/s on the duct area') + stat('Duct area', fmt(a44,3), 'm²');
+  const d = num('ioD'), po = ifdo(d, num('ioQ')), ao = Math.PI*d*d/4e6;
+  $('ioRes').innerHTML = stat('Pressure', fmt(po,0), `Pa  (${fmt(inwg(po),3)} in.wg)`) + stat('Face velocity', fmt(ao > 0 ? num('ioQ')/1000/ao : NaN,2), 'm/s on the duct area') + stat('Duct area', fmt(ao,3), 'm²');
+}
+function calcPress(){
+  if(mode === 'ifd'){ calcIfd(); return; }
+  if(mode === 'k'){
+    const Q = toM3s(parseFloat($('kFlow').value)||0, $('kFlowU').value), K = parseFloat($('kK').value)||0;
+    const round = kShape === 'C';
+    const A = round ? Math.PI*Math.pow(parseFloat($('kDia').value)/1000,2)/4 : (parseFloat($('kW').value)||0)*(parseFloat($('kH').value)||0)/1e6;
+    const v = Q/A, pv = RHO*v*v/2, dp = K*pv;
+    $('kRes').innerHTML = stat('Pressure drop', fmt(dp,1), `Pa  (${fmt(inwg(dp),3)} in.wg)`) + stat('Velocity', fmt(v,2), `m/s  (${fmt(v/0.00508,0)} fpm)`) + stat('Velocity pressure', fmt(pv,1), 'Pa') + stat('Face area', fmt(A,3), `m²  (${fmt(A*1e6,0)} mm²)`);
+  } else {
+    const pts = $('cPts').value.split(/\n+/).map(l => l.split(/[,\s;]+/).map(Number)).filter(p => p.length >= 2 && isFinite(p[0]) && isFinite(p[1]));
+    const qLs = $('cQU').value === 'ls' ? parseFloat($('cQ').value)||0 : ($('cQU').value === 'cfm' ? (parseFloat($('cQ').value)||0)/2.11888 : (parseFloat($('cQ').value)||0)/3.6);
+    if(pts.length < 2){ $('cRes').innerHTML = '<p class="note">Enter at least two airflow, ΔP pairs.</p>'; return; }
+    const r = interp(pts, qLs);
+    $('cRes').innerHTML = stat('Pressure drop', fmt(r.y,0), `Pa  (${fmt(inwg(r.y),3)} in.wg)`) + stat('Airflow used', fmt(qLs,1), 'L/s') + stat('Status', r.inRange ? '<span style="font-size:20px;color:var(--ok)">In range</span>' : '<span style="font-size:20px;color:var(--warn)">Extrapolated</span>', r.inRange ? 'Interpolated between table points' : 'Outside the table, treat as an estimate');
+  }
+}
+['kDia','kW','kH','kFlow','kFlowU','kK','cPts','cQ','cQU','i44W','i44H','i44Q','ioD','ioQ'].forEach(id => $(id).addEventListener('input', calcPress));
+
+/* ---------- filter & plenum ---------- */
+const num = id => parseFloat($(id).value) || 0;
+function calcFilter(){
+  const Q = num('flQ')/1000, vmax = num('flV') || 1.8;
+  const ws = ['flW1','flW2','flW3'].map(num), n = ws.filter(w => w > 0).length;
+  const totalW = ws.reduce((a,b)=>a+b,0), H = num('flH');
+  const area = totalW*H/1e6, v = area > 0 ? Q/area : NaN;
+  const ok = v <= vmax;
+  const reqArea = Q/vmax;
+  $('flRes').innerHTML =
+    stat('Face velocity', fmt(v,2), 'm/s') +
+    stat('Status', ok ? '<span style="font-size:20px;color:var(--ok)">Within limit</span>' : '<span style="font-size:20px;color:var(--warn)">Too fast</span>', ok ? `At or below ${fmt(vmax,1)} m/s` : `Needs more face area`) +
+    stat('Face area', fmt(area,3), 'm²  (' + n + ' panel' + (n===1?'':'s') + ', ' + fmt(totalW,0) + ' mm wide)') +
+    stat('Area needed', fmt(reqArea,3), `m² at ${fmt(vmax,1)} m/s`);
+  calcPlenum(totalW, H, n);
+}
+function calcPlenum(totalW, fH, n){
+  const eW = num('plEW'), eH = num('plEH'), ins = num('plIns'), ap = num('plAP');
+  const rW = num('plRW'), rH = num('plRH'), oW = num('plOW'), oH = num('plOH');
+  const W = Math.max(eW, totalW) + 2*ins;
+  const H = Math.max(fH, eH) + 2*ins;
+  const D = num('plD') > 0 ? num('plD') : eH + ap + 2*ins;
+  const innerW = W - 2*ins, innerH = H - 2*ins;
+  const conW = rW + oW, fitW = conW <= innerW, fitH = Math.max(rH, oH) <= innerH;
+  $('plRes').innerHTML =
+    stat('Plenum size', `${fmt(W,0).replace(/,/g,'')} × ${fmt(H,0).replace(/,/g,'')} × ${fmt(D,0).replace(/,/g,'')}`, 'W × H × D, mm') +
+    stat('Filter panels', String(n), 'from the widths above') +
+    stat('Connections, width', fitW ? '<span style="font-size:20px;color:var(--ok)">Fit</span>' : '<span style="font-size:20px;color:var(--warn)">Too wide</span>', `${fmt(conW,0)} mm of ${fmt(innerW,0)} mm inner width`) +
+    stat('Connections, height', fitH ? '<span style="font-size:20px;color:var(--ok)">Fit</span>' : '<span style="font-size:20px;color:var(--warn)">Too tall</span>', `${fmt(Math.max(rH,oH),0)} mm of ${fmt(innerH,0)} mm inner height`);
+}
+['flQ','flV','flW1','flW2','flW3','flH','plEW','plEH','plRW','plRH','plOW','plOH','plAP','plIns','plD'].forEach(id => $(id).addEventListener('input', calcFilter));
+
+/* ---------- louvre, grille, refrigerant ---------- */
+function sizeFree(pre, out){
+  const Q = num(pre+'Q'), V = num(pre+'V'), P = num(pre+'P')/100, H = num(pre+'H');
+  const free = V > 0 ? Q*1000/V : NaN;          // mm²
+  const total = P > 0 ? free/P : NaN;           // mm²
+  const W = H > 0 ? total/H : NaN;
+  $(out).innerHTML = stat('Free area', fmt(free,0), 'mm²') + stat('Total area', fmt(total,0), 'mm²') + stat('Width', fmt(W,1), `mm  (at ${fmt(H,0)} mm height)`);
+}
+function calcLouvre(){
+  sizeFree('lv','lvRes'); sizeFree('gr','grRes');
+  const wt = num('rfA')*num('rfH')*num('rfF');
+  $('rfRes').innerHTML = stat('Refrigerant weight', fmt(wt,1), 'kg');
+}
+['lvQ','lvV','lvP','lvH','grQ','grV','grP','grH','rfA','rfH','rfF'].forEach(id => $(id).addEventListener('input', calcLouvre));
+
+updateMethodUI(); buildRows(); calcDuct(); calcPress(); calcFilter(); calcLouvre();
+</script>
+
+</body></html>
