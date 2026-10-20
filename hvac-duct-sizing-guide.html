@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HVAC Duct Sizing Guide: Airflow, Friction & Pressure Drop | Trevion</title>
+  <meta name="description" content="Learn the basics of HVAC duct sizing, airflow units, equal-friction and velocity methods, pressure-drop estimates, and how to use Trevion's Duct Sizer Suite.">
+  <meta name="author" content="Trevion Technologies">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://trevion-technologies.onrender.com/hvac-duct-sizing-guide.html">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+  <meta property="og:title" content="HVAC Duct Sizing Guide | Trevion Technologies">
+  <meta property="og:description" content="A practical introduction to airflow, duct sizing methods, and pressure-drop estimates, with a link to Trevion's browser-based HVAC tool.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://trevion-technologies.onrender.com/hvac-duct-sizing-guide.html">
+  <meta property="og:image" content="https://trevion-technologies.onrender.com/logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { brandDark: '#0B2545', brandBlue: '#1396E6', brandLight: '#EEF4F8' } } } };
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; }
+    .article-copy h2 { font-size: 1.6rem; font-weight: 700; color: #0B2545; margin: 2rem 0 .75rem; line-height: 1.3; }
+    .article-copy h3 { font-size: 1.12rem; font-weight: 700; color: #0B2545; margin: 1.35rem 0 .5rem; }
+    .article-copy p, .article-copy li { color: #4b5563; line-height: 1.85; }
+    .article-copy ul, .article-copy ol { padding-left: 1.35rem; margin: .7rem 0 1rem; }
+    .article-copy ul { list-style: disc; }
+    .article-copy ol { list-style: decimal; }
+    .article-copy a { color: #087fc5; text-decoration: underline; text-underline-offset: 3px; }
+    .article-copy strong { color: #253746; }
+    .skip-link { position: absolute; left: -9999px; top: 0; }
+    .skip-link:focus { left: 1rem; top: 1rem; z-index: 100; background: white; padding: .75rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "HVAC Duct Sizing Guide: Airflow, Friction Rate and Pressure Drop",
+    "description": "A practical introduction to HVAC duct sizing methods, pressure-drop estimates, and using the Trevion Duct Sizer Suite as a preliminary design aid.",
+    "mainEntityOfPage": "https://trevion-technologies.onrender.com/hvac-duct-sizing-guide.html",
+    "author": { "@type": "Organization", "name": "Trevion Technologies", "url": "https://trevion-technologies.onrender.com/" },
+    "publisher": { "@type": "Organization", "name": "Trevion Technologies", "url": "https://trevion-technologies.onrender.com/", "logo": { "@type": "ImageObject", "url": "https://trevion-technologies.onrender.com/logo.png" } },
+    "datePublished": "2026-10-20",
+    "dateModified": "2026-10-20"
+  }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-5 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-3" aria-label="Trevion Technologies homepage">
+        <img src="/logo.png" alt="Trevion Technologies" class="h-10 w-auto object-contain">
+      </a>
+      <nav class="flex items-center gap-4 text-sm font-medium text-gray-600" aria-label="Breadcrumb navigation">
+        <a class="hover:text-brandBlue" href="/">Home</a>
+        <span class="text-gray-300">/</span>
+        <a class="hover:text-brandBlue" href="/revit-bim-automation.html">Revit &amp; BIM</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="bg-gradient-to-br from-brandDark via-[#132237] to-brandDark text-white py-16 lg:py-20">
+      <div class="max-w-5xl mx-auto px-5 lg:px-8">
+        <p class="text-brandBlue font-semibold uppercase tracking-wider text-xs sm:text-sm mb-4">HVAC Engineering Guide</p>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight max-w-4xl">HVAC Duct Sizing: Airflow, Friction Rate and Pressure Drop</h1>
+        <p class="mt-5 text-gray-300 text-base sm:text-lg leading-relaxed max-w-3xl">A practical starting point for understanding duct sizing inputs, comparing common sizing methods, and reviewing preliminary results with Trevion's browser-based Duct Sizer Suite.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/hvac-tool.html" class="inline-flex items-center gap-2 bg-brandBlue text-white font-semibold px-5 py-3 rounded-lg hover:bg-blue-500 transition-colors">Open HVAC Tool <i class="fa-solid fa-arrow-right"></i></a>
+          <a href="#how-to-use" class="inline-flex items-center gap-2 border border-white/40 text-white font-semibold px-5 py-3 rounded-lg hover:bg-white/10 transition-colors">Read the guide <i class="fa-solid fa-book-open"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <div class="max-w-7xl mx-auto px-5 lg:px-8 py-12 lg:py-16 grid lg:grid-cols-[minmax(0,1fr)_300px] gap-10">
+      <article class="article-copy min-w-0">
+        <p class="text-lg">HVAC duct sizing is the process of selecting duct dimensions that can carry the required airflow while meeting the project's limits for pressure loss, air velocity, noise, space and system performance. A calculator can help compare options, but the design inputs must come from the project requirements.</p>
+
+        <h2 id="inputs">1. Start with the right design inputs</h2>
+        <p>Before sizing a duct, confirm the airflow for each duct segment, the route length, the available space, and the applicable design criteria. Keep units consistent and check whether the airflow value represents a main trunk, a branch, or a terminal connection.</p>
+        <ul>
+          <li><strong>Airflow:</strong> use the required design flow for the segment, not a guessed value.</li>
+          <li><strong>Length:</strong> enter the straight-duct length when estimating straight-run friction loss. Fittings and equipment losses need separate consideration.</li>
+          <li><strong>Design method:</strong> choose a sizing method and criteria suitable for the project and system.</li>
+          <li><strong>Geometry:</strong> check the permitted duct width, height, diameter and aspect ratio against the coordinated space.</li>
+          <li><strong>System data:</strong> confirm duct material, lining/roughness assumptions, equipment data and relevant manufacturer information.</li>
+        </ul>
+
+        <h2 id="methods">2. Equal-friction method vs. velocity method</h2>
+        <h3>Equal-friction duct sizing</h3>
+        <p>The equal-friction approach selects a duct size using a target friction rate. The calculator estimates a size whose calculated straight-duct friction rate is at or below the entered target, then reports the velocity for review. The target friction rate should be set using the project's design criteria; a sample default is not a universal recommendation.</p>
+        <h3>Velocity-based duct sizing</h3>
+        <p>The velocity method sizes the duct to stay at or below an entered air-velocity limit and reports the resulting friction rate. Choose limits appropriate to the duct section and system requirements. A velocity check alone does not prove that the complete system pressure budget is acceptable.</p>
+
+        <h2 id="pressure-drop">3. Understand pressure-drop estimates</h2>
+        <p>Pressure loss across a complete HVAC air path may include straight duct friction, fittings, dampers, filters, grilles, coils and other equipment. The Duct Sizer Suite includes several preliminary helpers:</p>
+        <ul>
+          <li><strong>Straight duct:</strong> estimates friction rate and loss using the entered airflow, size assumptions and straight length.</li>
+          <li><strong>Damper K factor:</strong> estimates pressure drop from an entered loss coefficient and face velocity. Obtain the coefficient from applicable product data.</li>
+          <li><strong>Datasheet curve:</strong> interpolates between airflow/pressure points entered by the user. Confirm units and stay mindful when estimating outside the supplied range.</li>
+          <li><strong>Filter and plenum:</strong> helps compare face area, face velocity and preliminary box dimensions.</li>
+          <li><strong>Louvre and grille:</strong> estimates required area and width from airflow, velocity, free-area percentage and a chosen height.</li>
+        </ul>
+        <p>Do not treat a component estimate as a certified manufacturer value. For submittals and final selections, use the applicable manufacturer's published data and project requirements.</p>
+
+        <h2 id="how-to-use">4. How to use the Trevion Duct Sizer Suite</h2>
+        <ol>
+          <li>Open the <a href="/hvac-tool.html">HVAC Tool — Duct Sizer Suite</a>.</li>
+          <li>Under <strong>Design basis</strong>, choose equal friction or velocity method.</li>
+          <li>Select the airflow unit (L/s, CFM or m³/h), then enter the project-specific friction rate or maximum velocity as applicable.</li>
+          <li>Edit the example segment names, airflows and lengths. Example rows are starting data only; replace them with project values.</li>
+          <li>Review round and rectangular size options, reported velocity, friction rate and estimated straight-duct loss.</li>
+          <li>Use the sizing/check area to test a constrained duct width or height, then review the status and any warnings.</li>
+          <li>Use the other tabs for preliminary damper, filter, plenum, louvre and grille checks where relevant.</li>
+          <li>Record the assumptions and validate the results against the design basis, applicable standards and manufacturer information before using them in a project.</li>
+        </ol>
+
+        <h2 id="review">5. What the tool does not replace</h2>
+        <p>The Duct Sizer Suite is a browser-based preliminary helper. It does not automatically verify the complete HVAC system, all fittings and equipment losses, acoustic performance, fire/smoke requirements, balancing, code compliance, or fan selection. Calculations can also be affected by air density, operating conditions, installation details and the accuracy of inputs.</p>
+        <p>Have a suitably qualified designer review the final ductwork and pressure-loss calculations. Do not use example values or generic coefficients for a construction issue or equipment submittal without verifying them.</p>
+
+        <h2 id="faq">Frequently asked questions</h2>
+        <h3>What airflow units does the Duct Sizer Suite support?</h3>
+        <p>The duct-sizing and several component calculators support L/s, CFM and m³/h selectors where shown. Check the unit label for each input; some individual calculators use a fixed unit.</p>
+        <h3>Can I use the tool for round and rectangular ducts?</h3>
+        <p>Yes. The duct-sizing area displays round and rectangular options, and includes a check area for comparing a constrained size. Verify the selected size against the actual installation space and project standards.</p>
+        <h3>Does the result include every pressure loss in the HVAC system?</h3>
+        <p>No. Straight-duct loss and the component-specific estimates shown by the tool are not a substitute for a full system pressure-loss calculation that includes all relevant fittings, equipment and operating conditions.</p>
+        <h3>Are the default input values suitable for my project?</h3>
+        <p>Not necessarily. The page displays sample values to demonstrate the calculator. Replace them with approved project values and manufacturer data before relying on the results.</p>
+
+        <div class="mt-10 rounded-2xl bg-brandLight border border-blue-100 p-6 sm:p-8">
+          <p class="text-brandBlue font-semibold text-sm uppercase tracking-wider mb-2">Try the calculator</p>
+          <h2 class="!mt-0 !mb-3 text-2xl">Compare your preliminary duct-sizing options</h2>
+          <p class="mb-5">Use the Duct Sizer Suite to explore sizing options, then review the assumptions and results for your project.</p>
+          <a href="/hvac-tool.html" class="inline-flex items-center gap-2 bg-brandDark text-white font-semibold px-5 py-3 rounded-lg hover:bg-brandBlue transition-colors">Open HVAC Tool <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </article>
+
+      <aside class="space-y-5">
+        <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+          <h2 class="text-lg font-bold text-brandDark mb-3">On this page</h2>
+          <nav class="space-y-2 text-sm flex flex-col">
+            <a href="#inputs" class="text-brandBlue hover:underline">Design inputs</a>
+            <a href="#methods" class="text-brandBlue hover:underline">Sizing methods</a>
+            <a href="#pressure-drop" class="text-brandBlue hover:underline">Pressure drop</a>
+            <a href="#how-to-use" class="text-brandBlue hover:underline">How to use the tool</a>
+            <a href="#review" class="text-brandBlue hover:underline">Limitations and review</a>
+            <a href="#faq" class="text-brandBlue hover:underline">FAQs</a>
+          </nav>
+        </div>
+        <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+          <h2 class="text-lg font-bold text-brandDark mb-3">Explore Trevion</h2>
+          <div class="space-y-3 text-sm flex flex-col">
+            <a class="text-brandBlue hover:underline" href="/hvac-tool.html">HVAC Tool — Duct Sizer Suite</a>
+            <a class="text-brandBlue hover:underline" href="/revit-bim-automation.html">Revit, Dynamo &amp; BIM Automation</a>
+            <a class="text-brandBlue hover:underline" href="/business-process-automation.html">Business Process Automation</a>
+            <a class="text-brandBlue hover:underline" href="/">Trevion Technologies homepage</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="bg-brandDark text-gray-300 py-8">
+    <div class="max-w-7xl mx-auto px-5 lg:px-8 flex flex-col sm:flex-row gap-3 items-center justify-between text-sm">
+      <span>&copy; 2026 Trevion Technologies</span>
+      <nav class="flex gap-5" aria-label="Footer"><a class="hover:text-white" href="/">Home</a><a class="hover:text-white" href="/hvac-tool.html">HVAC Tool</a><a class="hover:text-white" href="/revit-bim-automation.html">Revit &amp; BIM</a></nav>
+    </div>
+  </footer>
+</body>
+</html>
