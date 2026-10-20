@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://trevion-technologies.onrender.com/</loc>
+    <lastmod>2026-10-20</lastmod>
   </url>
   <url>
     <loc>https://trevion-technologies.onrender.com/web-development.html</loc>
@@ -9,14 +10,18 @@
   </url>
   <url>
     <loc>https://trevion-technologies.onrender.com/business-process-automation.html</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-10-20</lastmod>
   </url>
   <url>
     <loc>https://trevion-technologies.onrender.com/revit-bim-automation.html</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-10-20</lastmod>
   </url>
   <url>
     <loc>https://trevion-technologies.onrender.com/hvac-tool.html</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://trevion-technologies.onrender.com/hvac-duct-sizing-guide.html</loc>
+    <lastmod>2026-10-20</lastmod>
   </url>
 </urlset>
