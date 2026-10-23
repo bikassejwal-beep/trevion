@@ -1,0 +1,2175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KTJQCH6PVV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-KTJQCH6PVV');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revit Dynamo Scripts: Parameters, QA, Tagging, BOQ &amp; Sheets | Trevion Technologies</title>
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandDark: '#0B2545',
+                        brandBlue: '#1396E6',
+                        brandLight: '#EEF4F8'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+        body { font-family: 'Poppins', sans-serif; }
+
+        #preloader {
+            position: fixed; inset: 0; z-index: 9999;
+            background: #0B2545;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hidden { opacity: 0; visibility: hidden; }
+        .loader-ring {
+            width: 56px; height: 56px;
+            border: 4px solid rgba(19,150,230,0.2);
+            border-top-color: #1396E6;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #mainHeader { transition: all 0.35s ease; }
+        #mainHeader.scrolled { box-shadow: 0 4px 25px rgba(11,37,69,0.08); }
+        #mainHeader.scrolled .nav-inner { height: 4.2rem; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { opacity: 0; animation: fadeUp 0.8s ease forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.3s; }
+        .delay-3 { animation-delay: 0.5s; }
+        .delay-4 { animation-delay: 0.7s; }
+
+        .gradient-text {
+            background: linear-gradient(90deg,#1396E6,#5ec8ff,#1396E6);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+        @keyframes shimmer { to { background-position: 200% center; } }
+
+        .btn-shine { position: relative; overflow: hidden; }
+        .btn-shine::before {
+            content: '';
+            position: absolute; top: 0; left: -75%;
+            width: 50%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.6s ease;
+        }
+        .btn-shine:hover::before { left: 125%; }
+
+        .service-card {
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -12px rgba(19,150,230,0.25);
+            border-color: #1396E6;
+        }
+        .service-icon { transition: transform 0.4s ease; }
+        .service-card:hover .service-icon { transform: rotate(-8deg) scale(1.1); }
+
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: ''; position: absolute; left: 0; bottom: -4px;
+            width: 0%; height: 2px; background: #1396E6;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        #scrollTopBtn {
+            position: fixed; bottom: 28px; right: 28px; z-index: 40;
+            width: 46px; height: 46px; border-radius: 9999px;
+            background: #0B2545; color: white;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 20px rgba(11,37,69,0.3);
+            opacity: 0; visibility: hidden; transform: translateY(15px);
+            transition: all 0.35s ease;
+        }
+        #scrollTopBtn.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        #scrollTopBtn:hover { background: #1396E6; transform: translateY(-4px); }
+
+        .social-icon { transition: transform 0.3s ease, color 0.3s ease; }
+        .social-icon:hover { transform: translateY(-4px) scale(1.15); }
+
+        /* inline code */
+        .ic {
+            background: #EEF4F8; color: #0B2545;
+            border: 1px solid #dbe5ee; border-radius: 6px;
+            padding: 1px 6px; font-size: 0.85em;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            word-break: break-word;
+        }
+
+        /* numbered steps */
+        .steps { list-style: none; counter-reset: step; padding: 0; margin: 12px 0 0; }
+        .steps li {
+            counter-increment: step; position: relative;
+            background: #F8FAFC; border: 1px solid #E5EAF0; border-radius: 12px;
+            padding: 14px 16px 14px 58px; margin: 10px 0;
+            color: #374151; font-size: 0.93rem; line-height: 1.65;
+        }
+        .steps li::before {
+            content: counter(step); position: absolute; left: 14px; top: 13px;
+            width: 30px; height: 30px; border-radius: 9999px;
+            background: #1396E6; color: #fff; font-weight: 700; font-size: 0.85rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* code box */
+        .codepre {
+            margin: 0; padding: 18px; background: #08111f; color: #d6e2ff;
+            max-height: 440px; overflow: auto; font-size: 0.78rem; line-height: 1.6; tab-size: 4;
+        }
+        .codepre code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    </style>
+
+    <!-- SEO -->
+    <meta name="description" content="Free Dynamo Python scripts for Revit MEP: export and import parameters with Excel, run model QA checks, tag elements, quantity takeoff to Excel, and create views and sheets in bulk. Step-by-step setup guide included.">
+    <meta name="author" content="Trevion Technologies">
+    <link rel="canonical" href="https://trevion-technologies.onrender.com/revit-dynamo-scripts.html">
+
+    <meta property="og:title" content="Revit Dynamo Scripts | Trevion Technologies">
+    <meta property="og:description" content="Six Dynamo Python scripts for Revit MEP with a step-by-step setup guide.">
+    <meta property="og:url" content="https://trevion-technologies.onrender.com/revit-dynamo-scripts.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://trevion-technologies.onrender.com/logo.png">
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <div id="preloader"><div class="loader-ring"></div></div>
+
+<!-- Header -->
+<header id="mainHeader" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 nav-inner h-20 flex items-center justify-between transition-all duration-300">
+        <a href="/" class="flex items-center gap-3">
+            <img src="./logo.png" alt="Trevion Technologies Logo" class="h-10 md:h-12 w-auto object-contain block">
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8 font-medium text-gray-600">
+            <a href="/" class="nav-link hover:text-brandBlue transition-colors">Home</a>
+            <a href="#scripts" class="nav-link hover:text-brandBlue transition-colors">Scripts</a>
+            <a href="#setup" class="nav-link hover:text-brandBlue transition-colors">Setup Guide</a>
+            <a href="#troubleshooting" class="nav-link hover:text-brandBlue transition-colors">Troubleshooting</a>
+            <a href="/#contact" class="btn-shine bg-brandDark text-white px-5 py-2.5 rounded-lg hover:bg-brandBlue transition-all shadow-md">
+                Get in Touch
+            </a>
+        </nav>
+
+        <button id="mobileMenuBtn" class="md:hidden text-brandDark text-2xl" aria-label="Open menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+
+    <div id="mobileMenu" class="md:hidden hidden flex-col gap-4 px-6 pb-6 font-medium text-gray-600 bg-white border-t border-gray-100">
+        <a href="/" class="py-1">Home</a>
+        <a href="#scripts" class="py-1">Scripts</a>
+        <a href="#setup" class="py-1">Setup Guide</a>
+        <a href="#troubleshooting" class="py-1">Troubleshooting</a>
+        <a href="/#contact" class="py-1 text-brandBlue font-semibold">Get in Touch</a>
+    </div>
+</header>
+
+<!-- Hero -->
+<section class="relative overflow-hidden bg-gradient-to-br from-brandDark via-[#132237] to-brandDark text-white py-20 lg:py-24">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="max-w-5xl mx-auto px-6 lg:px-8 relative z-10 space-y-6">
+        <nav class="fade-up delay-1 text-sm text-gray-400" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-white">Home</a> <span class="mx-2">/</span>
+            <a href="revit-bim-automation.html" class="hover:text-white">Revit, Dynamo &amp; BIM Automation</a> <span class="mx-2">/</span>
+            <span class="text-gray-200">Dynamo scripts</span>
+        </nav>
+        <span class="fade-up delay-1 inline-block text-brandBlue font-semibold uppercase tracking-wider text-sm bg-brandBlue/10 px-3 py-1 rounded-full border border-brandBlue/20">Revit · Dynamo · BIM Automation</span>
+        <h1 class="fade-up delay-2 text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+            Dynamo Python Scripts for <span class="gradient-text">Revit MEP</span>
+        </h1>
+        <p class="fade-up delay-3 text-gray-300 text-lg leading-relaxed max-w-3xl">
+            Six working scripts for everyday BIM tasks: move parameters in and out of Excel, check a model for common problems, tag elements, take off quantities, and create views and sheets in bulk. Copy them, run them in Dynamo, and adapt them to your standards.
+        </p>
+        <div class="fade-up delay-4 flex flex-wrap gap-4 pt-2">
+            <a href="#scripts" class="btn-shine bg-brandBlue text-white font-medium px-6 py-3.5 rounded-lg shadow-lg hover:bg-blue-500 transition-all flex items-center gap-2">
+                Get the Scripts <i class="fa-solid fa-arrow-right text-sm"></i>
+            </a>
+            <a href="#setup" class="border border-gray-400 text-white font-medium px-6 py-3.5 rounded-lg hover:bg-white/10 transition-all">
+                Read the Setup Guide
+            </a>
+        </div>
+    </div>
+</section>
+
+<main>
+
+<!-- Notice + overview -->
+<section class="py-16 max-w-7xl mx-auto px-6 lg:px-8">
+    <div data-aos="fade-up" class="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900 leading-relaxed max-w-4xl mx-auto mb-14">
+        <strong><i class="fa-solid fa-triangle-exclamation mr-1"></i> Before you start:</strong>
+        try every script on a <strong>copy of your project</strong> first and review the results against your project standards. Scripts that change the model do it in a single step, so <strong>Ctrl+Z</strong> in Revit undoes the whole run.
+    </div>
+
+    <div data-aos="fade-up" class="text-center max-w-3xl mx-auto mb-12 space-y-4">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brandDark tracking-tight">What Is Included</h2>
+        <div class="h-1 w-20 bg-brandBlue mx-auto rounded"></div>
+        <p class="text-gray-600">Each script is a single Python Script node for Dynamo. No packages to install.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="#parameter-manager" data-aos="fade-up" data-aos-delay="0" class="service-card bg-white border border-gray-100 p-6 rounded-2xl shadow-sm block"><div class="service-icon w-12 h-12 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl mb-4"><i class="fa-solid fa-table-list"></i></div><h3 class="text-lg font-bold text-brandDark mb-2">Parameter Manager</h3><p class="text-gray-600 text-sm leading-relaxed">Move parameters between Revit and Excel, and import only the cells you changed.</p></a><a href="#model-checker" data-aos="fade-up" data-aos-delay="100" class="service-card bg-white border border-gray-100 p-6 rounded-2xl shadow-sm block"><div class="service-icon w-12 h-12 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl mb-4"><i class="fa-solid fa-clipboard-check"></i></div><h3 class="text-lg font-bold text-brandDark mb-2">Model Checker</h3><p class="text-gray-600 text-sm leading-relaxed">Read-only QA report for empty parameters, untagged elements and duplicates.</p></a><a href="#auto-tagger" data-aos="fade-up" data-aos-delay="200" class="service-card bg-white border border-gray-100 p-6 rounded-2xl shadow-sm block"><div class="service-icon w-12 h-12 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl mb-4"><i class="fa-solid fa-tags"></i></div><h3 class="text-lg font-bold text-brandDark mb-2">Auto-Tagger</h3><p class="text-gray-600 text-sm leading-relaxed">Tag every untagged element in the active view with one run.</p></a><a href="#quantity-takeoff" data-aos="fade-up" data-aos-delay="0" class="service-card bg-white border border-gray-100 p-6 rounded-2xl shadow-sm block"><div class="service-icon w-12 h-12 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl mb-4"><i class="fa-solid fa-calculator"></i></div><h3 class="text-lg font-bold text-brandDark mb-2">Quantity Takeoff (BOQ)</h3><p class="text-gray-600 text-sm leading-relaxed">Counts, lengths and areas grouped by type, ready in Excel.</p></a><a href="#sheet-view-automation" data-aos="fade-up" data-aos-delay="100" class="service-card bg-white border border-gray-100 p-6 rounded-2xl shadow-sm block"><div class="service-icon w-12 h-12 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl mb-4"><i class="fa-solid fa-layer-group"></i></div><h3 class="text-lg font-bold text-brandDark mb-2">Sheet and View Automation</h3><p class="text-gray-600 text-sm leading-relaxed">A view and a sheet for each level, with the view placed on the sheet.</p></a><a href="#batch-sheet-maker" data-aos="fade-up" data-aos-delay="200" class="service-card bg-white border border-gray-100 p-6 rounded-2xl shadow-sm block"><div class="service-icon w-12 h-12 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl mb-4"><i class="fa-solid fa-file-circle-plus"></i></div><h3 class="text-lg font-bold text-brandDark mb-2">Batch Sheet Maker</h3><p class="text-gray-600 text-sm leading-relaxed">Create many sheets from an Excel list, with views and parameters.</p></a>
+    </div>
+</section>
+
+<!-- Requirements -->
+<section id="requirements" class="py-16 bg-white border-y border-gray-100">
+    <div class="max-w-5xl mx-auto px-6 lg:px-8">
+        <div data-aos="fade-up" class="mb-8 space-y-3">
+            <h2 class="text-3xl font-bold text-brandDark tracking-tight">Requirements</h2>
+            <div class="h-1 w-20 bg-brandBlue rounded"></div>
+        </div>
+        <ul data-aos="fade-up" class="space-y-3 text-gray-700">
+            <li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1.5"></i><span>Autodesk Revit with Dynamo for Revit. The Python engine used by these scripts is <strong>PythonNet3</strong>.</span></li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1.5"></i><span>Auto-Tagger needs <strong>Revit 2022 or later</strong>.</span></li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1.5"></i><span>Microsoft Excel, or any spreadsheet app that can save <strong>CSV UTF-8</strong>.</span></li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1.5"></i><span>A folder for the files the scripts write. The examples use <code class="ic">C:\Temp</code>. Create it first.</span></li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1.5"></i><span>For Auto-Tagger, the tag families for your categories (for example Duct Tag and Air Terminal Tag) loaded in the project. For the sheet scripts, at least one title block family.</span></li>
+        </ul>
+    </div>
+</section>
+
+<!-- Setup -->
+<section id="setup" class="py-20 max-w-5xl mx-auto px-6 lg:px-8">
+    <div data-aos="fade-up" class="mb-8 space-y-3">
+        <span class="text-brandBlue font-semibold uppercase tracking-wider text-sm">Setup Guide</span>
+        <h2 class="text-3xl font-bold text-brandDark tracking-tight">How to Run Any Script in Dynamo</h2>
+        <div class="h-1 w-20 bg-brandBlue rounded"></div>
+        <p class="text-gray-600">The steps are the same for all six scripts. Only the inputs change.</p>
+    </div>
+    <ol class="steps"><li><strong>Open Dynamo from Revit.</strong> Open your project (a copy is best), go to the <em>Manage</em> tab, and click <em>Dynamo</em>. Then choose <em>File &gt; New</em>.</li><li><strong>Add a Python Script node.</strong> Search for "Python Script" in the library and drag it onto the canvas. Click the <strong>+</strong> on the node until it has as many inputs as the script needs. Each tool below lists its inputs.</li><li><strong>Add one Code Block per input.</strong> Double-click empty canvas and type the value. Text needs quotes, for example <code class="ic">"Ducts";</code>. Paths need double backslashes, for example <code class="ic">"C:\\Temp\\params.csv";</code>. True and false have no quotes: <code class="ic">true;</code>.</li><li><strong>Wire the inputs in order.</strong> Connect the first Code Block to <code class="ic">IN[0]</code>, the second to <code class="ic">IN[1]</code>, and so on. The order matters.</li><li><strong>Paste the script.</strong> Double-click the Python node, delete the default code, paste the script, and click <em>Save Changes</em>. The first line must be <code class="ic"># -*- coding: utf-8 -*-</code>. Do not paste anything above it.</li><li><strong>Add a Watch node and run.</strong> Connect a Watch node to the <code class="ic">OUT</code> port. Set the run mode to <em>Manual</em> at the bottom left of Dynamo, then click <em>Run</em>. The script reports what it did in the Watch node.</li><li><strong>Running it again.</strong> If you change the model in Revit and click Run, Dynamo may not run the node again because its inputs did not change. Change the run toggle to <code class="ic">false;</code>, run, change it back to <code class="ic">true;</code> and run again. Clicking <em>Save Changes</em> in the Python node also works.</li></ol>
+</section>
+
+<!-- Scripts -->
+<section id="scripts" class="py-20 bg-brandLight border-y border-gray-200/50">
+    <div class="max-w-5xl mx-auto px-6 lg:px-8">
+        <div data-aos="fade-up" class="text-center max-w-3xl mx-auto mb-14 space-y-4">
+            <span class="text-brandBlue font-semibold uppercase tracking-wider text-sm">The Scripts</span>
+            <h2 class="text-3xl lg:text-4xl font-bold text-brandDark tracking-tight">Copy, Download and Run</h2>
+            <div class="h-1 w-20 bg-brandBlue mx-auto rounded"></div>
+            <p class="text-gray-600">Every script has its inputs, a procedure, and the full code with Copy and Download buttons.</p>
+        </div>
+        <div class="space-y-10"><article id="parameter-manager" data-aos="fade-up" class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 md:p-8">
+<div class="flex items-start gap-4"><div class="w-12 h-12 shrink-0 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl"><i class="fa-solid fa-table-list"></i></div><div><div class="flex flex-wrap gap-2 mb-2"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-amber-50 text-amber-700 border-amber-200">Changes the model</span><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-brandBlue/10 text-brandBlue border-brandBlue/20">Excel round trip</span></div><h3 class="text-2xl font-bold text-brandDark">1. Parameter Manager</h3></div></div>
+<p class="text-gray-600 leading-relaxed mt-4 max-w-3xl">Export parameter values for a category to CSV, edit them in Excel, then import the changes back into Revit. Useful for filling Mark, Comments, System Name and other parameters across many elements.</p>
+<h4 class="font-bold text-brandDark mt-6">Inputs</h4>
+<div class="overflow-x-auto border border-gray-200 rounded-xl my-4"><table class="w-full text-sm"><thead><tr><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Port</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">What</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Example</th></tr></thead><tbody><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[0]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Mode</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"export";</code> or <code class="ic">"import";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[1]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Category</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"Ducts";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[2]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">CSV file path</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"C:\\Temp\\params.csv";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[3]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Parameter names</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">["Mark", "Comments"];</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[4]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Run toggle</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">true;</code></td></tr></tbody></table></div>
+<p class="text-sm text-gray-600 leading-relaxed">Supported categories: Ducts, Duct Fittings, Duct Accessories, Air Terminals, Pipes, Pipe Fittings, Pipe Accessories, Mechanical Equipment, Plumbing Fixtures, Electrical Equipment, Electrical Fixtures, Lighting Fixtures, Cable Trays, Conduits, Sprinklers, Rooms and Spaces.</p>
+<h4 class="font-bold text-brandDark mt-6">Procedure</h4>
+<ol class="steps"><li>Set the mode to <code class="ic">"export"</code> and run. The Watch node shows how many elements were written, and the CSV appears at your path.</li><li>Open the CSV in Excel and edit the parameter columns. <strong>Do not delete the ElementId column.</strong> Save as <em>CSV UTF-8 (Comma delimited)</em>, then <strong>close Excel</strong>, because an open file is locked.</li><li>Change the mode to <code class="ic">"import"</code> and run. The Watch node shows how many values were updated and skipped.</li><li>Check a few elements in Revit. You can use <em>Manage &gt; Inquiry &gt; Select by ID</em> with an ElementId from the CSV.</li></ol>
+<h4 class="font-bold text-brandDark mt-6">Good to know</h4>
+<ul class="mt-2 space-y-2 text-sm text-gray-700"><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>Only values that differ from the model are written.</span></li><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>Read-only parameters and invalid values are skipped and listed in the report.</span></li><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>The whole import is one step. If an error happens, everything is rolled back.</span></li><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>Numbers with units use your project display units, for example millimetres.</span></li><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>Excel can change values such as <code class="ic">007</code> into <code class="ic">7</code>. Check these before importing.</span></li></ul>
+<div class="mt-8 rounded-xl overflow-hidden border border-slate-700"><div class="flex flex-wrap items-center justify-between gap-3 bg-slate-800 px-4 py-3"><span class="text-sm font-semibold text-white"><i class="fa-brands fa-python text-brandBlue mr-2"></i>parameter_manager.py</span><div class="flex gap-2"><button type="button" data-copy="code-pm" class="btn-shine bg-brandBlue text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-blue-500 transition-all"><i class="fa-regular fa-copy mr-1"></i> Copy</button><button type="button" data-download="code-pm" data-name="parameter_manager.py" class="border border-slate-500 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-white/10 transition-all"><i class="fa-solid fa-download mr-1"></i> Download .py</button></div></div><pre class="codepre"><code id="code-pm"># -*- coding: utf-8 -*-
+"""
+Parameter Manager - Dynamo Python Script Node (Revit)
+Export / Import parameters using an Excel-friendly CSV file.
+
+SETUP IN DYNAMO:
+  1. Add a Python Script node and paste this code.
+
+  2. Inputs (IN[0] ... IN[4]):
+       IN[0]  mode        : "export" or "import"
+       IN[1]  category    : "Ducts", "Pipes", "Mechanical Equipment", ...
+       IN[2]  file path   : r"C:\\Temp\\params.csv"
+       IN[3]  parameters  : ["Mark", "Comments", "System Name"]
+       IN[4]  run         : True (Boolean toggle; False disables execution)
+
+  3. OUT: Message / report.
+
+  Tip: Run "export" first, open the CSV in Excel, edit the values,
+  save it as CSV, and then run "import".
+"""
+
+from __future__ import unicode_literals
+import clr
+import io
+
+clr.AddReference("RevitAPI")
+clr.AddReference("RevitServices")
+
+from Autodesk.Revit.DB import (
+    FilteredElementCollector, BuiltInCategory, Category, ElementId,
+    StorageType, Transaction
+)
+from RevitServices.Persistence import DocumentManager
+
+doc = DocumentManager.Instance.CurrentDBDocument
+
+mode = str(IN[0]).strip().lower()
+cat_name = str(IN[1]).strip()
+path = IN[2]
+param_names = [str(p) for p in IN[3]]
+run = IN[4]
+
+# ----------------------------------------------------------------
+# Helper functions
+
+CATEGORY_MAP = {
+    "ducts": BuiltInCategory.OST_DuctCurves,
+    "duct fittings": BuiltInCategory.OST_DuctFitting,
+    "duct accessories": BuiltInCategory.OST_DuctAccessory,
+    "air terminals": BuiltInCategory.OST_DuctTerminal,
+    "pipes": BuiltInCategory.OST_PipeCurves,
+    "pipe fittings": BuiltInCategory.OST_PipeFitting,
+    "pipe accessories": BuiltInCategory.OST_PipeAccessory,
+    "mechanical equipment": BuiltInCategory.OST_MechanicalEquipment,
+    "plumbing fixtures": BuiltInCategory.OST_PlumbingFixtures,
+    "electrical equipment": BuiltInCategory.OST_ElectricalEquipment,
+    "electrical fixtures": BuiltInCategory.OST_ElectricalFixtures,
+    "lighting fixtures": BuiltInCategory.OST_LightingFixtures,
+    "cable trays": BuiltInCategory.OST_CableTray,
+    "conduits": BuiltInCategory.OST_Conduit,
+    "sprinklers": BuiltInCategory.OST_Sprinklers,
+    "rooms": BuiltInCategory.OST_Rooms,
+    "spaces": BuiltInCategory.OST_MEPSpaces,
+}
+
+
+def get_elements(name):
+    bic = CATEGORY_MAP.get(name.lower())
+
+    if bic is None:
+        raise Exception(
+            "Category '%s' is not supported. Supported categories: %s"
+            % (name, ", ".join(sorted(CATEGORY_MAP.keys())))
+        )
+
+    return (
+        FilteredElementCollector(doc)
+        .OfCategory(bic)
+        .WhereElementIsNotElementType()
+        .ToElements()
+    )
+
+
+def element_id_value(el):
+    eid = el.Id
+
+    try:
+        return int(eid.Value)          # Revit 2024 and later
+    except AttributeError:
+        return int(eid.IntegerValue)   # Revit 2023 and earlier
+
+
+def get_param(el, name):
+    return el.LookupParameter(name)
+
+
+def read_value(p):
+    if p is None:
+        return ""
+
+    st = p.StorageType
+
+    if st == StorageType.String:
+        return p.AsString() or ""
+
+    if st in (StorageType.Double, StorageType.Integer):
+        return p.AsValueString() or ""
+
+    if st == StorageType.ElementId:
+        return p.AsValueString() or ""
+
+    return ""
+
+
+def write_value(p, text):
+    """Returns True if the parameter value is successfully updated."""
+
+    if p is None or p.IsReadOnly:
+        return False
+
+    st = p.StorageType
+
+    if st == StorageType.String:
+        return bool(p.Set(text))
+
+    if st in (StorageType.Double, StorageType.Integer):
+        if text == "":
+            return False
+
+        return bool(p.SetValueString(text))
+
+    # ElementId parameters are not supported for import.
+    return False
+
+
+# ----------------------------------------------------------------
+# CSV handling
+# Simple Excel-compatible CSV functions supporting IronPython 2
+# and CPython 3.
+
+def csv_escape(s):
+    s = "" if s is None else "%s" % s
+
+    if any(c in s for c in [",", '"', "\n", "\r"]):
+        s = '"' + s.replace('"', '""') + '"'
+
+    return s
+
+
+def csv_parse(text):
+    rows, row, field, quoted, i, n = [], [], "", False, 0, len(text)
+
+    while i &lt; n:
+        c = text[i]
+
+        if quoted:
+            if c == '"':
+                if i + 1 &lt; n and text[i + 1] == '"':
+                    field += '"'
+                    i += 1
+                else:
+                    quoted = False
+            else:
+                field += c
+
+        else:
+            if c == '"':
+                quoted = True
+            elif c == ",":
+                row.append(field)
+                field = ""
+            elif c == "\n":
+                row.append(field)
+                rows.append(row)
+                row, field = [], ""
+            elif c != "\r":
+                field += c
+
+        i += 1
+
+    if field != "" or row:
+        row.append(field)
+        rows.append(row)
+
+    return rows
+
+
+# ----------------------------------------------------------------
+# Export parameters to CSV
+
+def do_export():
+    elements = get_elements(cat_name)
+
+    header = ["ElementId", "Category", "Family and Type"] + param_names
+    lines = [",".join(csv_escape(h) for h in header)]
+
+    for el in elements:
+        type_name = ""
+
+        try:
+            type_name = el.Name
+        except Exception:
+            pass
+
+        row = [element_id_value(el), cat_name, type_name]
+
+        for pn in param_names:
+            row.append(read_value(get_param(el, pn)))
+
+        lines.append(",".join(csv_escape(v) for v in row))
+
+    with io.open(path, "w", encoding="utf-8-sig", newline="") as f:
+        f.write("\r\n".join(lines) + "\r\n")
+
+    return "Export completed: %d elements -&gt; %s" % (len(elements), path)
+
+
+# ----------------------------------------------------------------
+# Import parameter values from CSV
+
+def do_import():
+    with io.open(path, "r", encoding="utf-8-sig") as f:
+        rows = csv_parse(f.read())
+
+    if not rows:
+        return "The CSV file is empty."
+
+    header = rows[0]
+
+    if "ElementId" not in header:
+        return "The CSV file does not contain an 'ElementId' column."
+
+    id_col = header.index("ElementId")
+
+    # Only parameters included in both the CSV header and
+    # the input parameter list will be updated.
+    cols = [
+        (i, h) for i, h in enumerate(header)
+        if h in param_names
+    ]
+
+    updated, skipped, missing = 0, 0, 0
+    report = []
+
+    t = Transaction(doc, "Parameter Manager - Import")
+    t.Start()
+
+    try:
+        for r in rows[1:]:
+            if len(r) &lt;= id_col or r[id_col].strip() == "":
+                continue
+
+            el = doc.GetElement(ElementId(int(r[id_col])))
+
+            if el is None:
+                missing += 1
+                report.append("Element %s was not found." % r[id_col])
+                continue
+
+            for i, pname in cols:
+                new_val = r[i] if i &lt; len(r) else ""
+                p = get_param(el, pname)
+
+                if p is None:
+                    skipped += 1
+                    continue
+
+                if read_value(p) == new_val:
+                    continue  # No change required.
+
+                if write_value(p, new_val):
+                    updated += 1
+                else:
+                    skipped += 1
+                    report.append(
+                        "Skipped: Element %s / Parameter %s "
+                        "(read-only or invalid value)"
+                        % (r[id_col], pname)
+                    )
+
+        t.Commit()
+
+    except Exception as ex:
+        t.RollBack()
+        return "Error: All changes were rolled back. Details: %s" % ex
+
+    summary = (
+        "Import completed: %d values updated, %d skipped, "
+        "%d elements not found"
+        % (updated, skipped, missing)
+    )
+
+    return [summary] + report[:50]
+
+
+# ----------------------------------------------------------------
+# Main execution
+
+if not run:
+    OUT = "Run toggle is False. No action was performed."
+
+elif mode == "export":
+    OUT = do_export()
+
+elif mode == "import":
+    OUT = do_import()
+
+else:
+    OUT = "Mode must be either 'export' or 'import'."
+</code></pre></div>
+</article>
+<article id="model-checker" data-aos="fade-up" class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 md:p-8">
+<div class="flex items-start gap-4"><div class="w-12 h-12 shrink-0 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl"><i class="fa-solid fa-clipboard-check"></i></div><div><div class="flex flex-wrap gap-2 mb-2"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200">Read-only</span><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-brandBlue/10 text-brandBlue border-brandBlue/20">QA / QC</span></div><h3 class="text-2xl font-bold text-brandDark">2. Model Checker</h3></div></div>
+<p class="text-gray-600 leading-relaxed mt-4 max-w-3xl">A QA check that never changes the model. It writes every problem it finds to a CSV report you can filter in Excel.</p>
+<div class="overflow-x-auto border border-gray-200 rounded-xl my-4"><table class="w-full text-sm"><thead><tr><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Check</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Meaning</th></tr></thead><tbody><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">EMPTY PARAMETER</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">A required parameter is missing from the element or has no value.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">NOT TAGGED</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">The element has no tag in any view. Rooms and Spaces are skipped.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">DUPLICATE</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Two elements of the same type at the same location. This check is experimental, so confirm what it reports before you delete anything.</td></tr></tbody></table></div>
+<h4 class="font-bold text-brandDark mt-6">Inputs</h4>
+<div class="overflow-x-auto border border-gray-200 rounded-xl my-4"><table class="w-full text-sm"><thead><tr><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Port</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">What</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Example</th></tr></thead><tbody><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[0]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Categories to check</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">["Ducts", "Pipes"];</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[1]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Required parameters</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">["Mark", "Comments"];</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[2]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Report file path</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"C:\\Temp\\model_check.csv";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[3]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Run toggle</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">true;</code></td></tr></tbody></table></div>
+<h4 class="font-bold text-brandDark mt-6">Procedure</h4>
+<ol class="steps"><li>Create the node with <strong>4 inputs</strong> and wire the Code Blocks as shown above.</li><li>Run. The Watch node shows the number of elements checked, a count for each check, and how many tags were found in the project.</li><li>Open the report in Excel and filter the <em>Check</em> column. Each row has the ElementId, category, type and a detail message.</li><li>Fix the problems in Revit, then run again (see step 7 of the setup guide).</li></ol>
+<div class="mt-8 rounded-xl overflow-hidden border border-slate-700"><div class="flex flex-wrap items-center justify-between gap-3 bg-slate-800 px-4 py-3"><span class="text-sm font-semibold text-white"><i class="fa-brands fa-python text-brandBlue mr-2"></i>model_checker.py</span><div class="flex gap-2"><button type="button" data-copy="code-mc" class="btn-shine bg-brandBlue text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-blue-500 transition-all"><i class="fa-regular fa-copy mr-1"></i> Copy</button><button type="button" data-download="code-mc" data-name="model_checker.py" class="border border-slate-500 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-white/10 transition-all"><i class="fa-solid fa-download mr-1"></i> Download .py</button></div></div><pre class="codepre"><code id="code-mc"># -*- coding: utf-8 -*-
+"""
+Model Checker v2 - Dynamo Python Script Node (Revit)
+READ-ONLY QA/QC check. It never changes the model.
+
+Checks:
+  1. EMPTY PARAMETER : required parameter is missing or empty
+  2. NOT TAGGED      : element has no tag in any view
+                       (skipped for Rooms and Spaces)
+  3. DUPLICATE       : same type at the same location
+
+v2 change: tag detection tries several Revit API methods and REPORTS
+how many tags it found, so a detection problem is visible in the output.
+
+SETUP IN DYNAMO:
+  1. Add a Python Script node (PythonNet3 engine) and paste this code.
+  2. Add 4 inputs (IN[0] ... IN[3]):
+       IN[0]  categories  : ["Ducts", "Pipes", "Mechanical Equipment"]
+       IN[1]  required    : ["Mark", "Comments", "System Name"]
+       IN[2]  report path : "C:\\Temp\\model_check.csv"
+       IN[3]  run         : true
+  3. Connect a Watch node to OUT and click Run.
+  4. Open the CSV report in Excel. Fix the problems in Revit.
+
+NOTE: After the model changes in Revit (for example you add tags),
+Dynamo may not re-run this node by itself. Change IN[3] to false and
+back to true, or open the node and click Save Changes, then Run.
+"""
+
+import clr
+import io
+
+clr.AddReference("RevitAPI")
+clr.AddReference("RevitServices")
+
+from Autodesk.Revit.DB import (
+    FilteredElementCollector, BuiltInCategory, StorageType,
+    IndependentTag, LocationPoint, LocationCurve
+)
+from RevitServices.Persistence import DocumentManager
+
+doc = DocumentManager.Instance.CurrentDBDocument
+
+cat_names = IN[0] if isinstance(IN[0], list) else [IN[0]]
+cat_names = [str(c).strip() for c in cat_names]
+required = [str(p) for p in IN[1]]
+path = IN[2]
+run = IN[3]
+
+# ----------------------------------------------------------------
+# Helpers
+
+CATEGORY_MAP = {
+    "ducts": BuiltInCategory.OST_DuctCurves,
+    "duct fittings": BuiltInCategory.OST_DuctFitting,
+    "duct accessories": BuiltInCategory.OST_DuctAccessory,
+    "air terminals": BuiltInCategory.OST_DuctTerminal,
+    "pipes": BuiltInCategory.OST_PipeCurves,
+    "pipe fittings": BuiltInCategory.OST_PipeFitting,
+    "pipe accessories": BuiltInCategory.OST_PipeAccessory,
+    "mechanical equipment": BuiltInCategory.OST_MechanicalEquipment,
+    "plumbing fixtures": BuiltInCategory.OST_PlumbingFixtures,
+    "electrical equipment": BuiltInCategory.OST_ElectricalEquipment,
+    "electrical fixtures": BuiltInCategory.OST_ElectricalFixtures,
+    "lighting fixtures": BuiltInCategory.OST_LightingFixtures,
+    "cable trays": BuiltInCategory.OST_CableTray,
+    "conduits": BuiltInCategory.OST_Conduit,
+    "sprinklers": BuiltInCategory.OST_Sprinklers,
+    "rooms": BuiltInCategory.OST_Rooms,
+    "spaces": BuiltInCategory.OST_MEPSpaces,
+}
+
+NO_TAG_CHECK = ("rooms", "spaces")
+
+
+def id_value(eid):
+    try:
+        return int(eid.Value)          # Revit 2024 and later
+    except AttributeError:
+        return int(eid.IntegerValue)   # Revit 2023 and earlier
+
+
+def get_elements(name):
+    bic = CATEGORY_MAP.get(name.lower())
+
+    if bic is None:
+        raise Exception(
+            "Category '%s' is not supported. Supported categories: %s"
+            % (name, ", ".join(sorted(CATEGORY_MAP.keys())))
+        )
+
+    return (
+        FilteredElementCollector(doc)
+        .OfCategory(bic)
+        .WhereElementIsNotElementType()
+        .ToElements()
+    )
+
+
+def type_name(el):
+    try:
+        return el.Name
+    except Exception:
+        return ""
+
+
+def is_empty(p):
+    """True if the parameter has no usable value."""
+    if p is None:
+        return True
+
+    st = p.StorageType
+
+    if st == StorageType.String:
+        return (p.AsString() or "").strip() == ""
+
+    return not p.HasValue
+
+
+def tagged_ids():
+    """
+    Returns (set of tagged element ids, number of tags found, errors).
+    Tries three Revit API methods, newest first.
+    """
+    result = set()
+    tag_count = 0
+    errors = []
+
+    for tag in FilteredElementCollector(doc).OfClass(IndependentTag).ToElements():
+        tag_count += 1
+        found = []
+
+        # Method 1: Revit 2022 and later
+        try:
+            for eid in tag.GetTaggedLocalElementIds():
+                found.append(id_value(eid))
+        except Exception as ex1:
+            # Method 2: Revit 2022 and later, returns LinkElementId
+            try:
+                for lid in tag.GetTaggedElementIds():
+                    found.append(id_value(lid.HostElementId))
+            except Exception as ex2:
+                # Method 3: Revit 2021 and earlier
+                try:
+                    found.append(id_value(tag.TaggedLocalElementId))
+                except Exception as ex3:
+                    if len(errors) &lt; 3:
+                        errors.append(str(ex1))
+
+        result.update(found)
+
+    return result, tag_count, errors
+
+
+def location_key(el):
+    """Rounded location, used to find duplicate elements."""
+    loc = el.Location
+
+    def r(pt):
+        return (round(pt.X, 3), round(pt.Y, 3), round(pt.Z, 3))
+
+    if isinstance(loc, LocationPoint):
+        return ("P", r(loc.Point))
+
+    if isinstance(loc, LocationCurve):
+        c = loc.Curve
+        a, b = r(c.GetEndPoint(0)), r(c.GetEndPoint(1))
+        return ("C",) + tuple(sorted([a, b]))
+
+    return None
+
+
+def csv_escape(s):
+    s = "" if s is None else "%s" % s
+
+    if any(c in s for c in [",", '"', "\n", "\r"]):
+        s = '"' + s.replace('"', '""') + '"'
+
+    return s
+
+
+# ----------------------------------------------------------------
+# Run all checks
+
+def run_checks():
+    issues = []   # (check, element_id, category, type, detail)
+    total = 0
+    tag_info = None   # (tags found, elements tagged, errors)
+    tags = None
+
+    for cat in cat_names:
+        elements = get_elements(cat)
+        total += len(elements)
+
+        # 1. Empty required parameters
+        for el in elements:
+            for pn in required:
+                p = el.LookupParameter(pn)
+
+                if p is None:
+                    issues.append(("EMPTY PARAMETER", id_value(el.Id), cat,
+                                   type_name(el),
+                                   "Parameter '%s' does not exist" % pn))
+                elif is_empty(p):
+                    issues.append(("EMPTY PARAMETER", id_value(el.Id), cat,
+                                   type_name(el),
+                                   "Parameter '%s' is empty" % pn))
+
+        # 2. Not tagged
+        if cat.lower() not in NO_TAG_CHECK:
+            if tags is None:
+                tags, tag_count, tag_errors = tagged_ids()
+                tag_info = (tag_count, len(tags), tag_errors)
+
+            for el in elements:
+                if id_value(el.Id) not in tags:
+                    issues.append(("NOT TAGGED", id_value(el.Id), cat,
+                                   type_name(el), "No tag in any view"))
+
+        # 3. Duplicates (same type at same location)
+        seen = {}
+
+        for el in elements:
+            key = location_key(el)
+
+            if key is None:
+                continue
+
+            key = (el.GetTypeId().ToString(), key)
+
+            if key in seen:
+                issues.append(("DUPLICATE", id_value(el.Id), cat,
+                               type_name(el),
+                               "Same type and location as element %s"
+                               % seen[key]))
+            else:
+                seen[key] = id_value(el.Id)
+
+    return issues, total, tag_info
+
+
+def write_report(issues):
+    header = ["Check", "ElementId", "Category", "Family and Type", "Detail"]
+    lines = [",".join(csv_escape(h) for h in header)]
+
+    for row in issues:
+        lines.append(",".join(csv_escape(v) for v in row))
+
+    with io.open(path, "w", encoding="utf-8-sig", newline="") as f:
+        f.write("\r\n".join(lines) + "\r\n")
+
+
+# ----------------------------------------------------------------
+# Main execution
+
+if not run:
+    OUT = "Run toggle is False. No action was performed."
+
+else:
+    try:
+        found, total, tag_info = run_checks()
+        write_report(found)
+
+        counts = {}
+        for row in found:
+            counts[row[0]] = counts.get(row[0], 0) + 1
+
+        OUT = [
+            "Checked %d elements. Issues found: %d" % (total, len(found)),
+            "EMPTY PARAMETER: %d" % counts.get("EMPTY PARAMETER", 0),
+            "NOT TAGGED: %d" % counts.get("NOT TAGGED", 0),
+            "DUPLICATE: %d" % counts.get("DUPLICATE", 0),
+        ]
+
+        if tag_info is not None:
+            OUT.append("Tags found in project: %d, elements tagged: %d"
+                       % (tag_info[0], tag_info[1]))
+
+            if tag_info[2]:
+                OUT.append("Tag read error: %s" % tag_info[2][0])
+
+        OUT.append("Report saved: %s" % path)
+
+    except Exception as ex:
+        OUT = "Error: %s" % ex
+</code></pre></div>
+</article>
+<article id="auto-tagger" data-aos="fade-up" class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 md:p-8">
+<div class="flex items-start gap-4"><div class="w-12 h-12 shrink-0 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl"><i class="fa-solid fa-tags"></i></div><div><div class="flex flex-wrap gap-2 mb-2"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-amber-50 text-amber-700 border-amber-200">Changes the model</span><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-brandBlue/10 text-brandBlue border-brandBlue/20">Revit 2022+</span></div><h3 class="text-2xl font-bold text-brandDark">3. Auto-Tagger</h3></div></div>
+<p class="text-gray-600 leading-relaxed mt-4 max-w-3xl">Tags every untagged element of the chosen categories in the active view. Elements that already have a tag in that view are skipped.</p>
+<h4 class="font-bold text-brandDark mt-6">Inputs</h4>
+<div class="overflow-x-auto border border-gray-200 rounded-xl my-4"><table class="w-full text-sm"><thead><tr><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Port</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">What</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Example</th></tr></thead><tbody><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[0]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Categories</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">["Ducts", "Air Terminals"];</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[1]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Position</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"middle";</code> tag on the element, no leader<br><code class="ic">"offset";</code> tag beside the element, with a leader</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[2]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Offset distance in millimetres (used by <code class="ic">"offset"</code>)</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">300;</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[3]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Run toggle</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">true;</code></td></tr></tbody></table></div>
+<p class="text-sm text-gray-600 leading-relaxed">Use one position at a time. If tags overlap with "middle", press Ctrl+Z in Revit and run again with "offset".</p>
+<h4 class="font-bold text-brandDark mt-6">Procedure</h4>
+<ol class="steps"><li>In Revit, open a <strong>plan, section or elevation view</strong> and keep it active. The script tags in whichever view is open.</li><li>Make sure the tag families for your categories are loaded: <em>Insert &gt; Load Family &gt; Annotations &gt; MEP</em>.</li><li>Create the node with <strong>4 inputs</strong>, wire the Code Blocks, paste the script, and run.</li><li>The Watch node shows the view name, how many elements are in the view, how many were already tagged, and how many new tags were created or failed.</li><li>Review the view. Ctrl+Z in Revit removes all the new tags in one step.</li></ol>
+<div class="mt-8 rounded-xl overflow-hidden border border-slate-700"><div class="flex flex-wrap items-center justify-between gap-3 bg-slate-800 px-4 py-3"><span class="text-sm font-semibold text-white"><i class="fa-brands fa-python text-brandBlue mr-2"></i>auto_tagger.py</span><div class="flex gap-2"><button type="button" data-copy="code-at" class="btn-shine bg-brandBlue text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-blue-500 transition-all"><i class="fa-regular fa-copy mr-1"></i> Copy</button><button type="button" data-download="code-at" data-name="auto_tagger.py" class="border border-slate-500 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-white/10 transition-all"><i class="fa-solid fa-download mr-1"></i> Download .py</button></div></div><pre class="codepre"><code id="code-at"># -*- coding: utf-8 -*-
+"""
+Auto-Tagger - Dynamo Python Script Node (Revit 2022 or later)
+Tags every UNTAGGED element of the chosen categories in the ACTIVE VIEW.
+
+- Elements that already have a tag in the active view are skipped.
+- Tag type = the default tag family loaded in the project for that category
+  (for example Duct Tag, Air Terminal Tag).
+- All tags are created in ONE transaction, so Ctrl+Z in Revit undoes them all.
+
+SETUP IN DYNAMO:
+  1. Add a Python Script node (PythonNet3 engine) and paste this code.
+  2. Add 4 inputs (IN[0] ... IN[3]):
+       IN[0]  categories : ["Ducts", "Air Terminals"]
+       IN[1]  position   : "middle"  (tag sits on the element, no leader)
+                           "offset"  (tag sits beside the element, with leader)
+       IN[2]  offset     : 300   (millimetres, used only for "offset")
+       IN[3]  run        : true
+  3. Connect a Watch node to OUT.
+  4. In Revit, open a PLAN, SECTION or ELEVATION view first.
+     Dynamo tags in whichever view is active in Revit.
+  5. Click Run.
+
+NOTE: If you run it again after changing the model, Dynamo may not
+re-run the node. Change IN[3] to false and back to true, then Run.
+"""
+
+import clr
+
+clr.AddReference("RevitAPI")
+clr.AddReference("RevitServices")
+
+from Autodesk.Revit.DB import (
+    FilteredElementCollector, BuiltInCategory, IndependentTag, Reference,
+    TagMode, TagOrientation, Transaction, ViewType
+)
+from RevitServices.Persistence import DocumentManager
+
+doc = DocumentManager.Instance.CurrentDBDocument
+view = doc.ActiveView
+
+cat_names = IN[0] if isinstance(IN[0], list) else [IN[0]]
+cat_names = [str(c).strip() for c in cat_names]
+position = str(IN[1]).strip().lower()
+offset_mm = float(IN[2])
+run = IN[3]
+
+# ----------------------------------------------------------------
+# Helpers
+
+CATEGORY_MAP = {
+    "ducts": BuiltInCategory.OST_DuctCurves,
+    "duct fittings": BuiltInCategory.OST_DuctFitting,
+    "duct accessories": BuiltInCategory.OST_DuctAccessory,
+    "air terminals": BuiltInCategory.OST_DuctTerminal,
+    "pipes": BuiltInCategory.OST_PipeCurves,
+    "pipe fittings": BuiltInCategory.OST_PipeFitting,
+    "pipe accessories": BuiltInCategory.OST_PipeAccessory,
+    "mechanical equipment": BuiltInCategory.OST_MechanicalEquipment,
+    "plumbing fixtures": BuiltInCategory.OST_PlumbingFixtures,
+    "electrical equipment": BuiltInCategory.OST_ElectricalEquipment,
+    "electrical fixtures": BuiltInCategory.OST_ElectricalFixtures,
+    "lighting fixtures": BuiltInCategory.OST_LightingFixtures,
+    "cable trays": BuiltInCategory.OST_CableTray,
+    "conduits": BuiltInCategory.OST_Conduit,
+    "sprinklers": BuiltInCategory.OST_Sprinklers,
+}
+
+SUPPORTED_VIEWS = (
+    ViewType.FloorPlan, ViewType.CeilingPlan, ViewType.EngineeringPlan,
+    ViewType.AreaPlan, ViewType.Section, ViewType.Elevation, ViewType.Detail
+)
+
+
+def id_value(eid):
+    try:
+        return int(eid.Value)          # Revit 2024 and later
+    except AttributeError:
+        return int(eid.IntegerValue)   # Revit 2023 and earlier
+
+
+def elements_in_view(name):
+    bic = CATEGORY_MAP.get(name.lower())
+
+    if bic is None:
+        raise Exception(
+            "Category '%s' is not supported. Supported categories: %s"
+            % (name, ", ".join(sorted(CATEGORY_MAP.keys())))
+        )
+
+    return (
+        FilteredElementCollector(doc, view.Id)
+        .OfCategory(bic)
+        .WhereElementIsNotElementType()
+        .ToElements()
+    )
+
+
+def tagged_in_view():
+    """Returns (set of element ids already tagged in this view, tag count)."""
+    result = set()
+    tag_count = 0
+
+    for tag in FilteredElementCollector(doc, view.Id).OfClass(IndependentTag).ToElements():
+        tag_count += 1
+
+        try:
+            for eid in tag.GetTaggedLocalElementIds():
+                result.add(id_value(eid))
+        except Exception:
+            try:
+                for lid in tag.GetTaggedElementIds():
+                    result.add(id_value(lid.HostElementId))
+            except Exception:
+                try:
+                    result.add(id_value(tag.TaggedLocalElementId))
+                except Exception:
+                    pass
+
+    return result, tag_count
+
+
+def element_point(el):
+    """Middle point of the element in model coordinates."""
+    loc = el.Location
+
+    pt = getattr(loc, "Point", None)            # point-based elements
+    if pt is not None:
+        return pt
+
+    crv = getattr(loc, "Curve", None)           # curve-based (ducts, pipes)
+    if crv is not None:
+        return crv.Evaluate(0.5, True)
+
+    bb = el.get_BoundingBox(view)               # fallback
+    if bb is not None:
+        return bb.Min.Add(bb.Max).Multiply(0.5)
+
+    return None
+
+
+# ----------------------------------------------------------------
+# Main execution
+
+if not run:
+    OUT = "Run toggle is False. No action was performed."
+
+elif view.ViewType not in SUPPORTED_VIEWS:
+    OUT = ("Active view '%s' (%s) cannot hold these tags. "
+           "Open a plan, section or elevation view in Revit and run again."
+           % (view.Name, view.ViewType))
+
+elif position not in ("middle", "offset"):
+    OUT = "Position must be 'middle' or 'offset'."
+
+else:
+    try:
+        already, tag_count = tagged_in_view()
+
+        # Safety: tags exist in this view but none could be read.
+        # Stop, otherwise every element would get a second tag.
+        if tag_count &gt; 0 and len(already) == 0:
+            raise Exception(
+                "The view has %d tags but their tagged elements could not "
+                "be read. Stopped to avoid double tagging." % tag_count)
+
+        todo = []
+        in_view = 0
+
+        for cat in cat_names:
+            for el in elements_in_view(cat):
+                in_view += 1
+
+                if id_value(el.Id) not in already:
+                    todo.append(el)
+
+        offset_ft = offset_mm / 304.8   # Revit works in feet
+        use_leader = (position == "offset")
+
+        created, failed = 0, 0
+        errors = []
+
+        t = Transaction(doc, "Auto-Tagger")
+        t.Start()
+
+        try:
+            for el in todo:
+                pt = element_point(el)
+
+                if pt is None:
+                    failed += 1
+                    errors.append("Element %d: no location" % id_value(el.Id))
+                    continue
+
+                if use_leader:
+                    pt = pt.Add(view.UpDirection.Multiply(offset_ft))
+
+                try:
+                    IndependentTag.Create(
+                        doc, view.Id, Reference(el), use_leader,
+                        TagMode.TM_ADDBY_CATEGORY,
+                        TagOrientation.Horizontal, pt)
+                    created += 1
+                except Exception as ex:
+                    failed += 1
+
+                    if len(errors) &lt; 3:
+                        errors.append("Element %d: %s"
+                                      % (id_value(el.Id), ex))
+
+            t.Commit()
+
+        except Exception as ex:
+            t.RollBack()
+            raise
+
+        OUT = [
+            "View: %s" % view.Name,
+            "Elements in view: %d, already tagged: %d"
+            % (in_view, in_view - len(todo)),
+            "New tags created: %d, failed: %d" % (created, failed),
+        ] + errors
+
+        if failed and created == 0:
+            OUT.append("Tip: check that the tag family (for example Duct Tag) "
+                       "is loaded in the project.")
+
+    except Exception as ex:
+        OUT = "Error: %s" % ex
+</code></pre></div>
+</article>
+<article id="quantity-takeoff" data-aos="fade-up" class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 md:p-8">
+<div class="flex items-start gap-4"><div class="w-12 h-12 shrink-0 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl"><i class="fa-solid fa-calculator"></i></div><div><div class="flex flex-wrap gap-2 mb-2"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200">Read-only</span><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-brandBlue/10 text-brandBlue border-brandBlue/20">Excel report</span></div><h3 class="text-2xl font-bold text-brandDark">4. Quantity Takeoff (BOQ)</h3></div></div>
+<p class="text-gray-600 leading-relaxed mt-4 max-w-3xl">Counts elements and adds up lengths and areas, grouped by category, family and type, and any parameters you choose. The result is a CSV file that opens in Excel.</p>
+<div class="overflow-x-auto border border-gray-200 rounded-xl my-4"><table class="w-full text-sm"><thead><tr><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Report column</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">What it shows</th></tr></thead><tbody><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Category, Family and Type</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">One row for each group.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Your group parameters</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">For example Size and System Type. Elements with the same values share a row.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Count</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Number of elements in the group.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Total Length (m)</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Filled for ducts, pipes, cable trays and conduits. Blank for fittings, equipment and terminals.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Total Area (m2)</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Surface area, filled for ducts and pipes.</td></tr></tbody></table></div>
+<h4 class="font-bold text-brandDark mt-6">Inputs</h4>
+<div class="overflow-x-auto border border-gray-200 rounded-xl my-4"><table class="w-full text-sm"><thead><tr><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Port</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">What</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Example</th></tr></thead><tbody><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[0]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Categories</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">["Ducts", "Pipes", "Duct Fittings", "Air Terminals"];</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[1]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Group-by parameters. Use <code class="ic">[];</code> to group by family and type only</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">["Size", "System Type"];</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[2]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Report file path</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"C:\\Temp\\boq.csv";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[3]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Run toggle</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">true;</code></td></tr></tbody></table></div>
+<h4 class="font-bold text-brandDark mt-6">Procedure</h4>
+<ol class="steps"><li>Create the node with <strong>4 inputs</strong> and wire the Code Blocks as shown above.</li><li>Run. The Watch node shows the elements counted and the total length for each category.</li><li>Open the CSV in Excel. A TOTAL row follows each category.</li><li>Check one element against the report. Select a duct in Revit and compare its Length in Properties.</li></ol>
+<h4 class="font-bold text-brandDark mt-6">Good to know</h4>
+<ul class="mt-2 space-y-2 text-sm text-gray-700"><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>Lengths are always in metres and areas in square metres, whatever your project units are.</span></li><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>The group parameter names must match the project exactly. A wrong name gives an empty column.</span></li><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>The script does not change the model.</span></li></ul>
+<div class="mt-8 rounded-xl overflow-hidden border border-slate-700"><div class="flex flex-wrap items-center justify-between gap-3 bg-slate-800 px-4 py-3"><span class="text-sm font-semibold text-white"><i class="fa-brands fa-python text-brandBlue mr-2"></i>quantity_takeoff.py</span><div class="flex gap-2"><button type="button" data-copy="code-qt" class="btn-shine bg-brandBlue text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-blue-500 transition-all"><i class="fa-regular fa-copy mr-1"></i> Copy</button><button type="button" data-download="code-qt" data-name="quantity_takeoff.py" class="border border-slate-500 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-white/10 transition-all"><i class="fa-solid fa-download mr-1"></i> Download .py</button></div></div><pre class="codepre"><code id="code-qt"># -*- coding: utf-8 -*-
+"""
+Quantity Takeoff (BOQ) - Dynamo Python Script Node (Revit)
+READ-ONLY. Counts elements and adds up lengths and areas, grouped by
+category, family and type, and any parameters you choose.
+The result is a CSV file that opens in Excel.
+
+Output columns:
+  Category | Family and Type | &lt;your group parameters&gt; |
+  Count | Total Length (m) | Total Area (m2)
+
+- Length and area are filled for duct, pipe, cable tray and conduit runs.
+  They are blank for fittings, equipment and terminals (count only).
+- A TOTAL row is added after each category.
+
+SETUP IN DYNAMO:
+  1. Add a Python Script node (PythonNet3 engine) and paste this code.
+  2. Add 4 inputs (IN[0] ... IN[3]):
+       IN[0]  categories    : ["Ducts", "Pipes", "Duct Fittings", "Air Terminals"]
+       IN[1]  group by      : ["Size", "System Type"]   (parameter names)
+       IN[2]  report path   : "C:\\Temp\\boq.csv"
+       IN[3]  run           : true
+  3. Connect a Watch node to OUT and click Run.
+  4. Open the CSV in Excel.
+
+NOTE: After you change the model, Dynamo may not re-run the node.
+Change IN[3] to false and back to true, then Run.
+"""
+
+import clr
+import io
+
+clr.AddReference("RevitAPI")
+clr.AddReference("RevitServices")
+
+from Autodesk.Revit.DB import (
+    FilteredElementCollector, BuiltInCategory, BuiltInParameter, StorageType
+)
+from RevitServices.Persistence import DocumentManager
+
+doc = DocumentManager.Instance.CurrentDBDocument
+
+cat_names = IN[0] if isinstance(IN[0], list) else [IN[0]]
+cat_names = [str(c).strip() for c in cat_names]
+
+group_params = IN[1] if isinstance(IN[1], list) else [IN[1]]
+group_params = [str(p).strip() for p in group_params if p is not None and str(p).strip() != ""]
+
+path = IN[2]
+run = IN[3]
+
+FT_TO_M = 0.3048
+FT2_TO_M2 = 0.09290304
+
+# Built-in parameters (looked up safely, so a missing name never stops the script)
+BIP_LENGTH = getattr(BuiltInParameter, "CURVE_ELEM_LENGTH", None)
+BIP_AREA = getattr(BuiltInParameter, "RBS_CURVE_SURFACE_AREA", None)
+BIP_FAMILY_TYPE = getattr(BuiltInParameter, "ELEM_FAMILY_AND_TYPE_PARAM", None)
+
+# ----------------------------------------------------------------
+# Helpers
+
+CATEGORY_MAP = {
+    "ducts": BuiltInCategory.OST_DuctCurves,
+    "duct fittings": BuiltInCategory.OST_DuctFitting,
+    "duct accessories": BuiltInCategory.OST_DuctAccessory,
+    "air terminals": BuiltInCategory.OST_DuctTerminal,
+    "pipes": BuiltInCategory.OST_PipeCurves,
+    "pipe fittings": BuiltInCategory.OST_PipeFitting,
+    "pipe accessories": BuiltInCategory.OST_PipeAccessory,
+    "mechanical equipment": BuiltInCategory.OST_MechanicalEquipment,
+    "plumbing fixtures": BuiltInCategory.OST_PlumbingFixtures,
+    "electrical equipment": BuiltInCategory.OST_ElectricalEquipment,
+    "electrical fixtures": BuiltInCategory.OST_ElectricalFixtures,
+    "lighting fixtures": BuiltInCategory.OST_LightingFixtures,
+    "cable trays": BuiltInCategory.OST_CableTray,
+    "conduits": BuiltInCategory.OST_Conduit,
+    "sprinklers": BuiltInCategory.OST_Sprinklers,
+}
+
+
+def get_elements(name):
+    bic = CATEGORY_MAP.get(name.lower())
+
+    if bic is None:
+        raise Exception(
+            "Category '%s' is not supported. Supported categories: %s"
+            % (name, ", ".join(sorted(CATEGORY_MAP.keys())))
+        )
+
+    return (
+        FilteredElementCollector(doc)
+        .OfCategory(bic)
+        .WhereElementIsNotElementType()
+        .ToElements()
+    )
+
+
+def param_text(p):
+    """Parameter value as text, using the project display units."""
+    if p is None:
+        return ""
+
+    if p.StorageType == StorageType.String:
+        return p.AsString() or ""
+
+    return p.AsValueString() or ""
+
+
+def family_and_type(el):
+    if BIP_FAMILY_TYPE is not None:
+        try:
+            p = el.get_Parameter(BIP_FAMILY_TYPE)
+            txt = p.AsValueString() if p is not None else None
+
+            if txt:
+                return txt
+        except Exception:
+            pass
+
+    try:
+        return el.Name
+    except Exception:
+        return ""
+
+
+def double_param(el, bip):
+    """Parameter value in Revit internal units (feet), or None."""
+    if bip is None:
+        return None
+
+    p = el.get_Parameter(bip)
+
+    if p is None or not p.HasValue:
+        return None
+
+    return p.AsDouble()
+
+
+def csv_escape(s):
+    s = "" if s is None else "%s" % s
+
+    if any(c in s for c in [",", '"', "\n", "\r"]):
+        s = '"' + s.replace('"', '""') + '"'
+
+    return s
+
+
+def fmt(v):
+    return "" if v is None else "%.2f" % v
+
+
+# ----------------------------------------------------------------
+# Build the takeoff
+
+def build_takeoff():
+    groups = {}
+    totals = {}
+    elements_counted = 0
+
+    for cat in cat_names:
+        totals[cat] = {"count": 0, "length": None, "area": None}
+
+        for el in get_elements(cat):
+            elements_counted += 1
+
+            key = (cat, family_and_type(el)) + tuple(
+                param_text(el.LookupParameter(n)) for n in group_params
+            )
+
+            g = groups.get(key)
+
+            if g is None:
+                g = {"count": 0, "length": None, "area": None}
+                groups[key] = g
+
+            length = double_param(el, BIP_LENGTH)
+            area = double_param(el, BIP_AREA)
+
+            for bucket in (g, totals[cat]):
+                bucket["count"] += 1
+
+                if length is not None:
+                    bucket["length"] = (bucket["length"] or 0.0) + length * FT_TO_M
+
+                if area is not None:
+                    bucket["area"] = (bucket["area"] or 0.0) + area * FT2_TO_M2
+
+    return groups, totals, elements_counted
+
+
+def write_report(groups, totals):
+    header = (["Category", "Family and Type"] + group_params
+              + ["Count", "Total Length (m)", "Total Area (m2)"])
+    lines = [",".join(csv_escape(h) for h in header)]
+    rows = 0
+
+    for cat in cat_names:
+        keys = sorted(k for k in groups if k[0] == cat)
+
+        for k in keys:
+            g = groups[k]
+            row = list(k) + [g["count"], fmt(g["length"]), fmt(g["area"])]
+            lines.append(",".join(csv_escape(v) for v in row))
+            rows += 1
+
+        t = totals[cat]
+        row = ([cat, "TOTAL"] + [""] * len(group_params)
+               + [t["count"], fmt(t["length"]), fmt(t["area"])])
+        lines.append(",".join(csv_escape(v) for v in row))
+        rows += 1
+
+    with io.open(path, "w", encoding="utf-8-sig", newline="") as f:
+        f.write("\r\n".join(lines) + "\r\n")
+
+    return rows
+
+
+# ----------------------------------------------------------------
+# Main execution
+
+if not run:
+    OUT = "Run toggle is False. No action was performed."
+
+else:
+    try:
+        groups, totals, counted = build_takeoff()
+        rows = write_report(groups, totals)
+
+        OUT = ["Elements counted: %d. Rows in report: %d" % (counted, rows)]
+
+        for cat in cat_names:
+            t = totals[cat]
+            line = "%s: %d elements" % (cat, t["count"])
+
+            if t["length"] is not None:
+                line += ", %.2f m" % t["length"]
+
+            OUT.append(line)
+
+        OUT.append("Report saved: %s" % path)
+
+    except Exception as ex:
+        OUT = "Error: %s" % ex
+</code></pre></div>
+</article>
+<article id="sheet-view-automation" data-aos="fade-up" class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 md:p-8">
+<div class="flex items-start gap-4"><div class="w-12 h-12 shrink-0 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl"><i class="fa-solid fa-layer-group"></i></div><div><div class="flex flex-wrap gap-2 mb-2"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-amber-50 text-amber-700 border-amber-200">Changes the model</span><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-brandBlue/10 text-brandBlue border-brandBlue/20">Floor plans</span></div><h3 class="text-2xl font-bold text-brandDark">5. Sheet and View Automation</h3></div></div>
+<p class="text-gray-600 leading-relaxed mt-4 max-w-3xl">Creates a floor plan view for each level, creates a sheet for each view, and places the view in the middle of its sheet.</p>
+<h4 class="font-bold text-brandDark mt-6">Inputs</h4>
+<div class="overflow-x-auto border border-gray-200 rounded-xl my-4"><table class="w-full text-sm"><thead><tr><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Port</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">What</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Example</th></tr></thead><tbody><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[0]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">View name prefix. The view name is the prefix plus the level name</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"HVAC - ";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[1]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">View template (exact name, or empty for none)</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[2]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Title block type name (empty uses the first one found)</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[3]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">First sheet number. The next sheets count up from it</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"M-101";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[4]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Levels. Use <code class="ic">[];</code> for all levels</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">["Level 1", "Level 2"];</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[5]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Run toggle</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">true;</code></td></tr></tbody></table></div>
+<p class="text-sm text-gray-600 leading-relaxed">Text in the levels list needs quotes. Writing <code class="ic">[Level 1];</code> without quotes gives a Code Block error and the input becomes null. The script stops with a message in that case.</p>
+<h4 class="font-bold text-brandDark mt-6">Procedure</h4>
+<ol class="steps"><li>Work in a <strong>copy of the project</strong>. Start with one level, for example <code class="ic">["Level 1"];</code>.</li><li>Create the node with <strong>6 inputs</strong>, wire the Code Blocks in order, paste the script, and run.</li><li>The Watch node lists the views created or reused and each sheet number with its name.</li><li>Open the sheets in Revit and check the view position and title block.</li><li>To undo everything, press Ctrl+Z in Revit once.</li></ol>
+<h4 class="font-bold text-brandDark mt-6">Good to know</h4>
+<ul class="mt-2 space-y-2 text-sm text-gray-700"><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>A view with the same name is reused, not created again.</span></li><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>A view that is already on a sheet is skipped.</span></li><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>Sheet numbers already in use are skipped, and the next free number is used.</span></li></ul>
+<div class="mt-8 rounded-xl overflow-hidden border border-slate-700"><div class="flex flex-wrap items-center justify-between gap-3 bg-slate-800 px-4 py-3"><span class="text-sm font-semibold text-white"><i class="fa-brands fa-python text-brandBlue mr-2"></i>sheet_view_automation.py</span><div class="flex gap-2"><button type="button" data-copy="code-sv" class="btn-shine bg-brandBlue text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-blue-500 transition-all"><i class="fa-regular fa-copy mr-1"></i> Copy</button><button type="button" data-download="code-sv" data-name="sheet_view_automation.py" class="border border-slate-500 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-white/10 transition-all"><i class="fa-solid fa-download mr-1"></i> Download .py</button></div></div><pre class="codepre"><code id="code-sv"># -*- coding: utf-8 -*-
+"""
+Sheet and View Automation - Dynamo Python Script Node (Revit)
+Creates a floor plan view for each level, creates a sheet for each view,
+and places the view in the middle of its sheet.
+
+- A view that already exists (same name) is reused, not created again.
+- A view that is already placed on a sheet is skipped.
+- Everything is done in ONE transaction, so Ctrl+Z in Revit undoes it all.
+
+SETUP IN DYNAMO:
+  1. Add a Python Script node (PythonNet3 engine) and paste this code.
+  2. Add 6 inputs (IN[0] ... IN[5]):
+       IN[0]  view name prefix : "HVAC - "            (view name = prefix + level name)
+       IN[1]  view template    : "HVAC Plan"          (exact name, or "" for none)
+       IN[2]  title block      : "A1 metric"          (type name, or "" for the first one)
+       IN[3]  first sheet no.  : "M-101"              (next sheets: M-102, M-103, ...)
+       IN[4]  levels           : ["Level 1", "Level 2"]   ([] means all levels)
+       IN[5]  run              : true
+  3. Connect a Watch node to OUT and click Run.
+
+NOTE: If you run it again, Dynamo may not re-run the node. Change IN[5]
+to false and back to true, then Run.
+"""
+
+import clr
+import re
+
+clr.AddReference("RevitAPI")
+clr.AddReference("RevitServices")
+
+from Autodesk.Revit.DB import (
+    FilteredElementCollector, BuiltInCategory, Level, ViewPlan, ViewFamily,
+    ViewFamilyType, ViewSheet, Viewport, View, Transaction, XYZ, FamilySymbol
+)
+from RevitServices.Persistence import DocumentManager
+
+doc = DocumentManager.Instance.CurrentDBDocument
+
+view_prefix = "" if IN[0] is None else str(IN[0])
+template_name = "" if IN[1] is None else str(IN[1]).strip()
+tb_name = "" if IN[2] is None else str(IN[2]).strip()
+first_sheet = "" if IN[3] is None else str(IN[3]).strip()
+
+levels_input = IN[4]
+level_filter = levels_input if isinstance(levels_input, list) else ([levels_input] if levels_input else [])
+level_filter = [str(x).strip().lower() for x in level_filter]
+
+run = IN[5]
+
+# ----------------------------------------------------------------
+# Helpers
+
+
+def id_value(eid):
+    try:
+        return int(eid.Value)          # Revit 2024 and later
+    except AttributeError:
+        return int(eid.IntegerValue)   # Revit 2023 and earlier
+
+
+def find_title_block():
+    """Returns (symbol, available names)."""
+    symbols = list(
+        FilteredElementCollector(doc)
+        .OfCategory(BuiltInCategory.OST_TitleBlocks)
+        .WhereElementIsElementType()
+        .ToElements()
+    )
+
+    names = []
+
+    for s in symbols:
+        names.append("%s: %s" % (s.FamilyName, s.Name))
+
+    if not symbols:
+        return None, names
+
+    if tb_name == "":
+        return symbols[0], names
+
+    q = tb_name.lower()
+
+    for s in symbols:
+        full = ("%s: %s" % (s.FamilyName, s.Name)).lower()
+
+        if q in (s.Name.lower(), s.FamilyName.lower(), full):
+            return s, names
+
+    return None, names
+
+
+def find_template():
+    if template_name == "":
+        return None
+
+    for v in FilteredElementCollector(doc).OfClass(View).ToElements():
+        if v.IsTemplate and v.Name == template_name:
+            return v
+
+    raise Exception("View template '%s' was not found." % template_name)
+
+
+# ----------------------------------------------------------------
+# Main execution
+
+if not run:
+    OUT = "Run toggle is False. No action was performed."
+
+else:
+    try:
+        # ---- check inputs before touching the model
+        if levels_input is None:
+            raise Exception(
+                "The levels input (IN[4]) is null. Check that Code Block for "
+                "errors. Use [] for all levels, or [\"Level 1\"] for one level.")
+
+        m = re.match(r"^(.*?)(\d+)$", first_sheet)
+
+        if not m:
+            raise Exception(
+                "First sheet number must end with digits, for example M-101.")
+
+        sheet_prefix = m.group(1)
+        sheet_next = int(m.group(2))
+        sheet_width = len(m.group(2))
+
+        def sheet_no(n):
+            return sheet_prefix + str(n).zfill(sheet_width)
+
+        title_block, tb_names = find_title_block()
+
+        if title_block is None:
+            if not tb_names:
+                raise Exception("No title block family is loaded in the project.")
+
+            raise Exception(
+                "Title block '%s' was not found. Available: %s"
+                % (tb_name, "; ".join(tb_names)))
+
+        template = find_template()
+
+        plan_types = [
+            t for t in FilteredElementCollector(doc).OfClass(ViewFamilyType).ToElements()
+            if t.ViewFamily == ViewFamily.FloorPlan
+        ]
+
+        if not plan_types:
+            raise Exception("No Floor Plan view type found in the project.")
+
+        plan_type = plan_types[0]
+
+        # ---- levels (lowest first)
+        levels = sorted(
+            FilteredElementCollector(doc).OfClass(Level).ToElements(),
+            key=lambda l: l.Elevation)
+
+        missing_levels = []
+
+        if level_filter:
+            found = [l.Name.lower() for l in levels]
+            missing_levels = [n for n in level_filter if n not in found]
+            levels = [l for l in levels if l.Name.lower() in level_filter]
+
+        if not levels:
+            raise Exception("No matching levels found.")
+
+        # ---- what already exists
+        all_views = list(FilteredElementCollector(doc).OfClass(View).ToElements())
+        view_by_name = {}
+
+        for v in all_views:
+            if not v.IsTemplate:
+                view_by_name[v.Name] = v
+
+        used_names = set(v.Name for v in all_views)
+        used_numbers = set(
+            s.SheetNumber for s in FilteredElementCollector(doc).OfClass(ViewSheet).ToElements())
+        placed = set(
+            id_value(vp.ViewId) for vp in FilteredElementCollector(doc).OfClass(Viewport).ToElements())
+
+        views_created, views_reused, sheets_created, placed_count = 0, 0, 0, 0
+        skipped = 0
+        errors = []
+        sheet_list = []
+
+        t = Transaction(doc, "Sheet and View Automation")
+        t.Start()
+
+        try:
+            if not title_block.IsActive:
+                title_block.Activate()
+                doc.Regenerate()
+
+            for lvl in levels:
+                name = view_prefix + lvl.Name
+
+                try:
+                    view = view_by_name.get(name)
+
+                    if view is None:
+                        if name in used_names:
+                            raise Exception("name '%s' is already used" % name)
+
+                        view = ViewPlan.Create(doc, plan_type.Id, lvl.Id)
+                        view.Name = name
+                        used_names.add(name)
+
+                        if template is not None:
+                            view.ViewTemplateId = template.Id
+
+                        views_created += 1
+                    else:
+                        views_reused += 1
+
+                    if id_value(view.Id) in placed:
+                        skipped += 1
+                        continue
+
+                    while sheet_no(sheet_next) in used_numbers:
+                        sheet_next += 1
+
+                    number = sheet_no(sheet_next)
+
+                    sheet = ViewSheet.Create(doc, title_block.Id)
+                    sheet.SheetNumber = number
+                    sheet.Name = name
+                    used_numbers.add(number)
+                    sheets_created += 1
+
+                    if Viewport.CanAddViewToSheet(doc, sheet.Id, view.Id):
+                        o = sheet.Outline
+                        cx = (o.Min.U + o.Max.U) / 2.0
+                        cy = (o.Min.V + o.Max.V) / 2.0
+                        Viewport.Create(doc, sheet.Id, view.Id, XYZ(cx, cy, 0))
+                        placed.add(id_value(view.Id))
+                        placed_count += 1
+                        sheet_list.append("%s  %s" % (number, name))
+                    else:
+                        errors.append("%s: view could not be placed on its sheet" % name)
+
+                except Exception as ex:
+                    if len(errors) &lt; 5:
+                        errors.append("%s: %s" % (lvl.Name, ex))
+
+            t.Commit()
+
+        except Exception:
+            t.RollBack()
+            raise
+
+        OUT = [
+            "Views created: %d, reused: %d" % (views_created, views_reused),
+            "Sheets created: %d, views placed: %d, skipped (already on a sheet): %d"
+            % (sheets_created, placed_count, skipped),
+        ] + sheet_list
+
+        if missing_levels:
+            OUT.append("Levels not found: %s" % ", ".join(missing_levels))
+
+        OUT += errors
+
+    except Exception as ex:
+        OUT = "Error: %s" % ex
+</code></pre></div>
+</article>
+<article id="batch-sheet-maker" data-aos="fade-up" class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 md:p-8">
+<div class="flex items-start gap-4"><div class="w-12 h-12 shrink-0 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue text-xl"><i class="fa-solid fa-file-circle-plus"></i></div><div><div class="flex flex-wrap gap-2 mb-2"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-amber-50 text-amber-700 border-amber-200">Changes the model</span><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full border bg-brandBlue/10 text-brandBlue border-brandBlue/20">Excel list</span></div><h3 class="text-2xl font-bold text-brandDark">6. Batch Sheet Maker</h3></div></div>
+<p class="text-gray-600 leading-relaxed mt-4 max-w-3xl">Write your sheet list in Excel and create all the sheets at once. Each row can also place a view or schedule on the sheet and fill sheet parameters such as Drawn By.</p>
+<div class="overflow-x-auto border border-gray-200 rounded-xl my-4"><table class="w-full text-sm"><thead><tr><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">CSV column</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Use</th></tr></thead><tbody><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">SheetNumber</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Required. For example M-101.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">SheetName</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Required. For example Ground Floor HVAC Plan.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">TitleBlock</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Optional. Title block type name. Empty uses the default from IN[2].</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">View</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Optional. Exact name of a view or schedule to place on the sheet.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Any other column</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">A sheet parameter to fill, for example Drawn By or Checked By. The name must match the parameter.</td></tr></tbody></table></div>
+<h4 class="font-bold text-brandDark mt-6">Inputs</h4>
+<div class="overflow-x-auto border border-gray-200 rounded-xl my-4"><table class="w-full text-sm"><thead><tr><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Port</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">What</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Example</th></tr></thead><tbody><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[0]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Mode</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"template";</code> or <code class="ic">"create";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[1]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">CSV file path</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"C:\\Temp\\sheets.csv";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[2]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Default title block (empty uses the first one found)</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">"";</code></td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">IN[3]</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Run toggle</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">true;</code></td></tr></tbody></table></div>
+<h4 class="font-bold text-brandDark mt-6">Procedure</h4>
+<ol class="steps"><li>Set the mode to <code class="ic">"template"</code> and run. A starter CSV is written, and the Watch node lists the title blocks in your project.</li><li>Open the CSV in Excel, replace the two sample rows with your sheet list, save as <em>CSV UTF-8</em>, and <strong>close Excel</strong>.</li><li>Change the mode to <code class="ic">"create"</code> and run. The Watch node shows how many sheets were created and views placed.</li><li>Check Project Browser &gt; Sheets in Revit. Ctrl+Z removes all the new sheets in one step.</li></ol>
+<h4 class="font-bold text-brandDark mt-6">Good to know</h4>
+<ul class="mt-2 space-y-2 text-sm text-gray-700"><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>Every row is checked before anything is created. Problems are listed in the Watch node.</span></li><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>A sheet number that already exists is skipped.</span></li><li class="flex gap-3"><i class="fa-solid fa-check text-brandBlue mt-1"></i><span>A view that is already on another sheet is not moved. The Watch node tells you.</span></li></ul>
+<div class="mt-8 rounded-xl overflow-hidden border border-slate-700"><div class="flex flex-wrap items-center justify-between gap-3 bg-slate-800 px-4 py-3"><span class="text-sm font-semibold text-white"><i class="fa-brands fa-python text-brandBlue mr-2"></i>batch_sheet_maker.py</span><div class="flex gap-2"><button type="button" data-copy="code-bs" class="btn-shine bg-brandBlue text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-blue-500 transition-all"><i class="fa-regular fa-copy mr-1"></i> Copy</button><button type="button" data-download="code-bs" data-name="batch_sheet_maker.py" class="border border-slate-500 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-white/10 transition-all"><i class="fa-solid fa-download mr-1"></i> Download .py</button></div></div><pre class="codepre"><code id="code-bs"># -*- coding: utf-8 -*-
+"""
+Batch Sheet Maker - Dynamo Python Script Node (Revit)
+Creates many sheets at once from an Excel-friendly CSV list.
+
+CSV columns (first row = header):
+  SheetNumber  (required)  e.g. M-101
+  SheetName    (required)  e.g. Ground Floor HVAC Plan
+  TitleBlock   (optional)  title block type name, blank = the default input
+  View         (optional)  exact name of a view or schedule to place on the sheet
+  &lt;any other column&gt;       a sheet parameter to fill, e.g. "Drawn By", "Checked By"
+
+Two modes:
+  "template" : writes a starter CSV (header + 2 sample rows) and lists the
+               title blocks available in the project.
+  "create"   : reads the CSV and creates the sheets.
+
+- Sheet numbers that already exist in the project are skipped.
+- Everything is created in ONE transaction, so Ctrl+Z in Revit undoes it all.
+
+SETUP IN DYNAMO:
+  1. Add a Python Script node (PythonNet3 engine) and paste this code.
+  2. Add 4 inputs (IN[0] ... IN[3]):
+       IN[0]  mode               : "template"  or  "create"
+       IN[1]  CSV file path      : "C:\\Temp\\sheets.csv"
+       IN[2]  default title block: "A1 metric"   (type name, or "" for the first one)
+       IN[3]  run                : true
+  3. Connect a Watch node to OUT and click Run.
+
+NOTE: If you run it again, Dynamo may not re-run the node. Change IN[3]
+to false and back to true, then Run.
+"""
+
+import clr
+import io
+
+clr.AddReference("RevitAPI")
+clr.AddReference("RevitServices")
+
+from Autodesk.Revit.DB import (
+    FilteredElementCollector, BuiltInCategory, ViewSheet, Viewport, View,
+    ViewType, Transaction, XYZ, ScheduleSheetInstance, StorageType
+)
+from RevitServices.Persistence import DocumentManager
+
+doc = DocumentManager.Instance.CurrentDBDocument
+
+mode = "" if IN[0] is None else str(IN[0]).strip().lower()
+path = IN[1]
+default_tb = "" if IN[2] is None else str(IN[2]).strip()
+run = IN[3]
+
+KNOWN = ("sheetnumber", "sheetname", "titleblock", "view")
+
+# ----------------------------------------------------------------
+# Helpers
+
+
+def csv_escape(s):
+    s = "" if s is None else "%s" % s
+
+    if any(c in s for c in [",", '"', "\n", "\r"]):
+        s = '"' + s.replace('"', '""') + '"'
+
+    return s
+
+
+def csv_parse(text, delim):
+    rows, row, field, quoted, i, n = [], [], "", False, 0, len(text)
+
+    while i &lt; n:
+        c = text[i]
+
+        if quoted:
+            if c == '"':
+                if i + 1 &lt; n and text[i + 1] == '"':
+                    field += '"'
+                    i += 1
+                else:
+                    quoted = False
+            else:
+                field += c
+
+        else:
+            if c == '"':
+                quoted = True
+            elif c == delim:
+                row.append(field)
+                field = ""
+            elif c == "\n":
+                row.append(field)
+                rows.append(row)
+                row, field = [], ""
+            elif c != "\r":
+                field += c
+
+        i += 1
+
+    if field != "" or row:
+        row.append(field)
+        rows.append(row)
+
+    return rows
+
+
+def title_blocks():
+    return list(
+        FilteredElementCollector(doc)
+        .OfCategory(BuiltInCategory.OST_TitleBlocks)
+        .WhereElementIsElementType()
+        .ToElements()
+    )
+
+
+def tb_label(s):
+    return "%s: %s" % (s.FamilyName, s.Name)
+
+
+def match_title_block(symbols, name):
+    if not symbols:
+        return None
+
+    if name == "":
+        return symbols[0]
+
+    q = name.lower()
+
+    for s in symbols:
+        if q in (s.Name.lower(), s.FamilyName.lower(), tb_label(s).lower()):
+            return s
+
+    return None
+
+
+def set_param(p, text):
+    if p is None or p.IsReadOnly or text == "":
+        return False
+
+    st = p.StorageType
+
+    if st == StorageType.String:
+        return bool(p.Set(text))
+
+    if st in (StorageType.Double, StorageType.Integer):
+        return bool(p.SetValueString(text))
+
+    return False
+
+
+# ----------------------------------------------------------------
+# Template mode
+
+def do_template():
+    lines = [
+        "SheetNumber,SheetName,TitleBlock,View",
+        "M-101,Ground Floor HVAC Plan,,HVAC - Ground Floor FFL",
+        "M-102,First Floor HVAC Plan,,",
+    ]
+
+    with io.open(path, "w", encoding="utf-8-sig", newline="") as f:
+        f.write("\r\n".join(lines) + "\r\n")
+
+    out = [
+        "Template saved: %s" % path,
+        "Edit it in Excel: replace or delete the 2 sample rows, then save as CSV UTF-8.",
+        "Add more columns to fill sheet parameters, for example: Drawn By, Checked By",
+        "Title blocks in this project:",
+    ]
+
+    for s in title_blocks():
+        out.append("  " + tb_label(s))
+
+    return out
+
+
+# ----------------------------------------------------------------
+# Create mode
+
+def do_create():
+    with io.open(path, "r", encoding="utf-8-sig") as f:
+        text = f.read()
+
+    first_line = text.split("\n")[0] if text else ""
+    delim = ";" if first_line.count(";") &gt; first_line.count(",") else ","
+
+    rows = csv_parse(text, delim)
+
+    if not rows:
+        return "The CSV file is empty."
+
+    header = [h.strip() for h in rows[0]]
+    low = [h.lower() for h in header]
+
+    for req in ("sheetnumber", "sheetname"):
+        if req not in low:
+            return "The CSV needs a '%s' column." % (
+                "SheetNumber" if req == "sheetnumber" else "SheetName")
+
+    def col(name):
+        return low.index(name) if name in low else None
+
+    c_num, c_name = col("sheetnumber"), col("sheetname")
+    c_tb, c_view = col("titleblock"), col("view")
+    extra = [(i, h) for i, h in enumerate(header)
+             if h != "" and h.lower() not in KNOWN]
+
+    def cell(r, i):
+        if i is None or i &gt;= len(r):
+            return ""
+        return r[i].strip()
+
+    symbols = title_blocks()
+
+    if not symbols:
+        return "No title block family is loaded in the project."
+
+    existing = set(
+        s.SheetNumber for s in FilteredElementCollector(doc).OfClass(ViewSheet).ToElements())
+
+    skip_types = (ViewType.DrawingSheet, ViewType.ProjectBrowser,
+                  ViewType.SystemBrowser, ViewType.Internal)
+    view_by_name = {}
+
+    for v in FilteredElementCollector(doc).OfClass(View).ToElements():
+        if not v.IsTemplate and v.ViewType not in skip_types:
+            view_by_name[v.Name] = v
+
+    # ---- check every row before touching the model
+    todo = []
+    problems = []
+    seen = set()
+
+    for n, r in enumerate(rows[1:], start=2):
+        number, name = cell(r, c_num), cell(r, c_name)
+
+        if number == "" and name == "":
+            continue
+
+        if number == "" or name == "":
+            problems.append("Row %d: SheetNumber and SheetName are both needed" % n)
+            continue
+
+        if number in existing:
+            problems.append("Row %d: sheet %s already exists, skipped" % (n, number))
+            continue
+
+        if number in seen:
+            problems.append("Row %d: sheet %s is repeated in the CSV, skipped" % (n, number))
+            continue
+
+        tb_text = cell(r, c_tb) or default_tb
+        tb = match_title_block(symbols, tb_text)
+
+        if tb is None:
+            problems.append("Row %d: title block '%s' not found" % (n, tb_text))
+            continue
+
+        seen.add(number)
+        todo.append((n, number, name, tb, cell(r, c_view), r))
+
+    created, placed, params_set = 0, 0, 0
+    messages = []
+
+    t = Transaction(doc, "Batch Sheet Maker")
+    t.Start()
+
+    try:
+        activated = False
+
+        for tb in set(item[3] for item in todo):
+            if not tb.IsActive:
+                tb.Activate()
+                activated = True
+
+        if activated:
+            doc.Regenerate()
+
+        for n, number, name, tb, view_name, r in todo:
+            try:
+                sheet = ViewSheet.Create(doc, tb.Id)
+
+                try:
+                    sheet.SheetNumber = number
+                    sheet.Name = name
+                except Exception as ex:
+                    doc.Delete(sheet.Id)
+                    problems.append("Row %d: %s (%s)" % (n, number, ex))
+                    continue
+
+                created += 1
+
+                for i, h in extra:
+                    if set_param(sheet.LookupParameter(h), cell(r, i)):
+                        params_set += 1
+
+                if view_name != "":
+                    v = view_by_name.get(view_name)
+
+                    if v is None:
+                        messages.append("%s: view '%s' not found" % (number, view_name))
+                        continue
+
+                    o = sheet.Outline
+
+                    try:
+                        if v.ViewType == ViewType.Schedule:
+                            ScheduleSheetInstance.Create(
+                                doc, sheet.Id, v.Id,
+                                XYZ(o.Min.U + 0.15, o.Max.V - 0.15, 0))
+                            placed += 1
+                        elif Viewport.CanAddViewToSheet(doc, sheet.Id, v.Id):
+                            Viewport.Create(
+                                doc, sheet.Id, v.Id,
+                                XYZ((o.Min.U + o.Max.U) / 2.0,
+                                    (o.Min.V + o.Max.V) / 2.0, 0))
+                            placed += 1
+                        else:
+                            messages.append(
+                                "%s: view '%s' is already on another sheet" % (number, view_name))
+                    except Exception as ex:
+                        messages.append("%s: could not place '%s' (%s)" % (number, view_name, ex))
+
+            except Exception as ex:
+                problems.append("Row %d: %s (%s)" % (n, number, ex))
+
+        t.Commit()
+
+    except Exception:
+        t.RollBack()
+        raise
+
+    out = [
+        "Sheets created: %d, views placed: %d, sheet parameters set: %d"
+        % (created, placed, params_set),
+    ]
+
+    out += messages[:10]
+    out += problems[:10]
+
+    if len(messages) + len(problems) &gt; 20:
+        out.append("...more messages not shown")
+
+    return out
+
+
+# ----------------------------------------------------------------
+# Main execution
+
+if not run:
+    OUT = "Run toggle is False. No action was performed."
+
+elif mode == "template":
+    try:
+        OUT = do_template()
+    except Exception as ex:
+        OUT = "Error: %s" % ex
+
+elif mode == "create":
+    try:
+        OUT = do_create()
+    except Exception as ex:
+        OUT = "Error: %s" % ex
+
+else:
+    OUT = "Mode must be 'template' or 'create'."
+</code></pre></div>
+</article></div>
+    </div>
+</section>
+
+<!-- Troubleshooting -->
+<section id="troubleshooting" class="py-20 max-w-5xl mx-auto px-6 lg:px-8">
+    <div data-aos="fade-up" class="mb-6 space-y-3">
+        <span class="text-brandBlue font-semibold uppercase tracking-wider text-sm">Troubleshooting</span>
+        <h2 class="text-3xl font-bold text-brandDark tracking-tight">Common Problems</h2>
+        <div class="h-1 w-20 bg-brandBlue rounded"></div>
+        <p class="text-gray-600">Hover over the orange warning icon on the Python node to read the error message.</p>
+    </div>
+    <div class="overflow-x-auto border border-gray-200 rounded-xl my-4"><table class="w-full text-sm"><thead><tr><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">What you see</th><th class="text-left px-4 py-3 font-semibold text-brandDark bg-brandLight">Why, and what to do</th></tr></thead><tbody><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Watch shows <code class="ic">null</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">The script did not run. Hover over the orange warning icon on the Python node, check the number of inputs, and click Run in Manual mode.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">Invalid syntax (&lt;string&gt;, line 1)</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Something extra was pasted above the first line. Delete everything in the editor and paste again so the first line is <code class="ic"># -*- coding: utf-8 -*-</code>.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">Run toggle is False. No action was performed.</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">The run input is not <code class="ic">true</code>, or it is wired to the wrong port. Check the order of the inputs.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Same result after changing the model</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Dynamo did not run the node again. Change the toggle to <code class="ic">false;</code>, run, change it back to <code class="ic">true;</code>, and run again.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">An input is <code class="ic">null</code> and a Code Block is red</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Text needs quotes. Write <code class="ic">["Level 1"];</code>, not <code class="ic">[Level 1];</code>.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">An error about converting text to a number</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">An input is wired to the wrong port. Check that each Code Block is connected to the port with the same number.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Tags fail to create</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">The tag family is not loaded. Load it from <em>Insert &gt; Load Family &gt; Annotations</em>. The active view must be a plan, section or elevation.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">The CSV cannot be written or read</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Create the folder first, use double backslashes in the path, and close the file in Excel.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700"><code class="ic">Category '...' is not supported</code></td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Use one of the category names listed in the Parameter Manager section, spelled exactly the same.</td></tr><tr><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">Title block not found</td><td class="px-4 py-3 align-top border-t border-gray-100 text-gray-700">The error lists the title blocks in the project. Copy one name into the title block input.</td></tr></tbody></table></div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="bg-brandDark text-white py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:18px_18px]"></div>
+    <div class="max-w-3xl mx-auto px-6 text-center relative z-10 space-y-6" data-aos="fade-up">
+        <h2 class="text-3xl font-bold">Need a Script Built for Your Workflow?</h2>
+        <p class="text-gray-300 leading-relaxed">We build and test Dynamo scripts and Revit tools for repeated BIM tasks, and document them so your team can use them.</p>
+        <div class="flex flex-wrap justify-center gap-4 pt-2">
+            <a href="/#contact" class="btn-shine bg-brandBlue text-white font-medium px-6 py-3.5 rounded-lg shadow-lg hover:bg-blue-500 transition-all">Discuss a BIM Workflow</a>
+            <a href="revit-bim-automation.html" class="border border-gray-400 text-white font-medium px-6 py-3.5 rounded-lg hover:bg-white/10 transition-all">Back to Revit &amp; BIM Automation</a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-brandDark text-gray-400 py-12 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-sm text-center md:text-left">
+            &copy; 2026 Trevion Technologies. All rights reserved.
+            <div class="text-xs text-gray-500 mt-1">Scripts are provided as they are. Test on a copy of your project and verify the results.</div>
+        </div>
+        <div class="flex gap-6 text-lg">
+            <a href="https://www.linkedin.com/company/trevion-technologies" target="_blank" rel="noopener noreferrer" aria-label="Trevion Technologies on LinkedIn" class="social-icon hover:text-white"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://github.com/bikassejwal-beep/trevion" target="_blank" rel="noopener noreferrer" aria-label="Trevion Technologies on GitHub" class="social-icon hover:text-white"><i class="fa-brands fa-github"></i></a>
+            <a href="mailto:info.trevion@gmail.com" aria-label="Email Trevion Technologies" class="social-icon hover:text-white"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+    </div>
+</footer>
+
+<button id="scrollTopBtn" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic' });
+
+    window.addEventListener('load', function () {
+        document.getElementById('preloader').classList.add('hidden');
+    });
+
+    var header = document.getElementById('mainHeader');
+    var scrollTopBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 40) {
+            header.classList.add('scrolled');
+            scrollTopBtn.classList.add('show');
+        } else {
+            header.classList.remove('scrolled');
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+    scrollTopBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+    var mobileBtn = document.getElementById('mobileMenuBtn');
+    var mobileMenu = document.getElementById('mobileMenu');
+    mobileBtn.addEventListener('click', function () {
+        mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('flex');
+    });
+
+    // ---- Copy and download buttons for the code boxes
+    function getCode(id) {
+        var el = document.getElementById(id);
+        return el ? el.textContent : '';
+    }
+
+    function fallbackCopy(text, done) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(ta);
+    }
+
+    function copyText(text, btn) {
+        var original = btn.innerHTML;
+        var done = function () {
+            btn.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Copied';
+            setTimeout(function () { btn.innerHTML = original; }, 1600);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text, done); });
+        } else {
+            fallbackCopy(text, done);
+        }
+    }
+
+    document.querySelectorAll('[data-copy]').forEach(function (b) {
+        b.addEventListener('click', function () { copyText(getCode(b.getAttribute('data-copy')), b); });
+    });
+
+    document.querySelectorAll('[data-download]').forEach(function (b) {
+        b.addEventListener('click', function () {
+            var blob = new Blob([getCode(b.getAttribute('data-download'))], { type: 'text/x-python;charset=utf-8' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = b.getAttribute('data-name');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    });
+</script>
+
+</body>
+</html>
