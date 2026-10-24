@@ -274,7 +274,32 @@
     </div>
     <ol class="steps"><li><strong>Open Dynamo from Revit.</strong> Open your project (a copy is best), go to the <em>Manage</em> tab, and click <em>Dynamo</em>. Then choose <em>File &gt; New</em>.</li><li><strong>Add a Python Script node.</strong> Search for "Python Script" in the library and drag it onto the canvas. Click the <strong>+</strong> on the node until it has as many inputs as the script needs. Each tool below lists its inputs.</li><li><strong>Add one Code Block per input.</strong> Double-click empty canvas and type the value. Text needs quotes, for example <code class="ic">"Ducts";</code>. Paths need double backslashes, for example <code class="ic">"C:\\Temp\\params.csv";</code>. True and false have no quotes: <code class="ic">true;</code>.</li><li><strong>Wire the inputs in order.</strong> Connect the first Code Block to <code class="ic">IN[0]</code>, the second to <code class="ic">IN[1]</code>, and so on. The order matters.</li><li><strong>Paste the script.</strong> Double-click the Python node, delete the default code, paste the script, and click <em>Save Changes</em>. The first line must be <code class="ic"># -*- coding: utf-8 -*-</code>. Do not paste anything above it.</li><li><strong>Add a Watch node and run.</strong> Connect a Watch node to the <code class="ic">OUT</code> port. Set the run mode to <em>Manual</em> at the bottom left of Dynamo, then click <em>Run</em>. The script reports what it did in the Watch node.</li><li><strong>Running it again.</strong> If you change the model in Revit and click Run, Dynamo may not run the node again because its inputs did not change. Change the run toggle to <code class="ic">false;</code>, run, change it back to <code class="ic">true;</code> and run again. Clicking <em>Save Changes</em> in the Python node also works.</li></ol>
 </section>
+    
+<!-- Complete Dynamo Procedures Workbook -->
+<section class="py-8 max-w-5xl mx-auto px-6 lg:px-8">
+  <div class="rounded-2xl border border-blue-100 bg-white p-6 text-center shadow-sm">
+    <div class="text-3xl text-brandBlue mb-3">
+      <i class="fa-solid fa-file-excel"></i>
+    </div>
 
+    <h2 class="text-xl font-bold text-brandDark mb-2">
+      Complete Dynamo Scripts Procedure Guide
+    </h2>
+
+    <p class="text-gray-600 text-sm leading-relaxed mb-5">
+      Download the complete Excel workbook containing setup instructions,
+      procedures for all six Dynamo scripts, and troubleshooting guidance.
+    </p>
+
+    <a href="revit-dynamo-scripts-procedures.xlsx"
+       download
+       class="inline-flex items-center gap-2 rounded-lg bg-brandBlue px-5 py-3 font-semibold text-white hover:bg-blue-500 transition-colors">
+      <i class="fa-solid fa-download"></i>
+      Download All Procedures (Excel)
+    </a>
+  </div>
+</section>
+    
 <!-- Scripts -->
 <section id="scripts" class="py-20 bg-brandLight border-y border-gray-200/50">
     <div class="max-w-5xl mx-auto px-6 lg:px-8">
